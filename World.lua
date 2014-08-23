@@ -25,14 +25,14 @@ function World:initialize()
 	self._worlddata = WorldData()
 	self._room = self._worlddata:getRoom("start")
 
-	self:buildSpriteBatch(room)
-	self:buildCollisionBoxes(room)
+	self:buildSpriteBatch(self._room)
+	self:buildCollisionBoxes(self._room)
 end
 
 function World:buildSpriteBatch(room)
 	self._spritebatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
 
-	for i, tile in ipairs(room.tiles) do
+	for i, tile in ipairs(room.fgtiles) do
 		local x = ((i - 1) % room.w) * TILEW
 		local y = 0
 		if i > 1 then
@@ -47,7 +47,7 @@ end
 function World:buildCollisionBoxes(room)
 	self._boxes = {}
 
-	for i, tile in ipairs(room.tiles) do
+	for i, tile in ipairs(room.fgtiles) do
 		local x = ((i - 1) % room.w) * TILEW
 		local y = 0
 		if i > 1 then
@@ -60,7 +60,7 @@ function World:buildCollisionBoxes(room)
 end
 
 function World:update(dt)
-	
+
 end
 
 function World:draw()
@@ -69,6 +69,10 @@ end
 
 function World:getBoxes()
 	return self._boxes
+end
+
+function World:getRoom()
+	return self._room
 end
 
 return World

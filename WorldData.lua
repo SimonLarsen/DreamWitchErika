@@ -9,15 +9,18 @@ function WorldData:initialize()
 	self._rooms = {}
 	self._spawns = {}
 	self._doors = {}
-	self._tiles = {}
+	self._fgtiles = {}
+	self._bgtiles = {}
 	self._xtiles, self._ytiles = 0, 0
 
 	for i,v in ipairs(data.layers) do
-		if v.name == "Tiles" then
+		if v.name == "FG" then
 			self._xtiles = v.width
 			self._ytiles = v.height
-			self._tiles = v.data
-		elseif v.name == "Objects" then
+			self._fgtiles = v.data
+		elseif v.name == "BG" then
+			self._bgtiles = v.data
+		elseif v.name == "OBJ" then
 			for j, o in ipairs(v.objects) do
 				if o.type == "room" then
 					local r = Room(o.x/TILEW, o.y/TILEW, o.width/TILEW, o.height/TILEW, o.name)
@@ -39,7 +42,9 @@ function WorldData:initialize()
 	for i,v in ipairs(self._rooms) do
 		for iy=v.y, v.y+v.h-1 do
 			for ix=v.x, v.x+v.w-1 do
-				table.insert(v.tiles, self:getTile(ix, iy))
+				local fg, bg = self:getTile(ix, iy)
+				table.insert(v.fgtiles, fg)
+				table.insert(v.bgtiles, bg)
 			end
 		end
 	end
@@ -53,12 +58,9 @@ function WorldData:getSpawns()
 	return self._spawns
 end
 
-function WorldData:getTiles()
-	return self._tiles
-end
-
 function WorldData:getTile(x, y)
-	return self._tiles[x + y*self._xtiles + 1]
+	return self._fgtiles[x + y*self._xtiles + 1], 
+	       self._bgtiles[x + y*self._xtiles + 1]
 end
 
 function WorldData:getRoom(id)

@@ -17,6 +17,7 @@ function Player:initialize()
 	self.dir = 1
 	self.name = "player"
 	self.grounded = false
+	self.slash = 0
 
 	self.collider = BoxCollider(8, 20)
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
@@ -47,10 +48,18 @@ function Player:update(dt)
 		self.yspeed = -Player.static.JUMP_POWER
 	end
 
+	if self.slash > 0 then
+		self.slash = self.slash - dt
+		if self.slash <= 0 then
+			local slash = Slash(self.x+self.dir*12, self.y, self.dir, self.xspeed)
+			self.scene:addEntity(slash)
+		end
+	end
+
 	-- Slash
-	if Input.static:wasPressed(" ") then
-		local slash = Slash(self.x+self.dir*10, self.y, self.dir)
-		self.scene:addEntity(slash)
+	if Input.static:wasPressed(" ") and self.slash <= 0 then
+		self.slash = 0.3
+		self.animator:setProperty("swing", true)
 	end
 	
 	-- Update physics / collisions
@@ -76,6 +85,11 @@ function Player:update(dt)
 	end
 
 	self.animator:update(dt)
+
+	local room = self.world:getRoom()
+	local camx = math.min(room.w*TILEW-WIDTH/2, math.max(WIDTH/2, self.x))
+	local camy = math.min(room.h*TILEW-HEIGHT/2, math.max(HEIGHT/2, self.y))
+	Camera.static:setPosition(camx, camy)
 end
 
 function Player:draw()
