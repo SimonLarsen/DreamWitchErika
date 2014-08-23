@@ -1,14 +1,12 @@
 local Entity = require("Entity")
 local BBox = require("BBox")
+local WorldData = require("WorldData")
 
 local World = class("World", Entity)
 
 function World:initialize()
 	self.x, self.y, self.z = 0, 0, 100
 	self.name = "world"
-
-	local chunk = love.filesystem.load("data/maps/test.lua")
-	local data = chunk()
 
 	self._tileset = Resources.static:getImage("tiles.png")
 	local imgw = self._tileset:getWidth()
@@ -24,21 +22,39 @@ function World:initialize()
 		end
 	end
 
+	self._worlddata = WorldData()
+	self._room = self._worlddata:getRoom("start")
+
+	self:buildSpriteBatch(room)
+	self:buildCollisionBoxes(room)
+end
+
+function World:buildSpriteBatch(room)
+	self._spritebatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
+
+	for i, tile in ipairs(room.tiles) do
+		local x = ((i - 1) % room.w) * TILEW
+		local y = 0
+		if i > 1 then
+			y = math.floor((i-1) / room.w) * TILEW
+		end
+		if tile > 0 then
+			self._spritebatch:add(self._quads[tile], x, y)
+		end
+	end
+end
+
+function World:buildCollisionBoxes(room)
 	self._boxes = {}
-	self._spritebatch = love.graphics.newSpriteBatch(self._tileset, 512)
-	for i, layer in ipairs(data.layers) do
-		if layer.name == "Tiles" then
-			for j, tile in ipairs(layer.data) do
-				local x = ((j - 1) % layer.width) * TILEW
-				local y = 0
-				if j > 1 then
-					y = math.floor((j-1) / layer.width) * TILEW
-				end
-				self._spritebatch:add(self._quads[tile], x, y)
-				if tile > 1 then
-					table.insert(self._boxes, BBox(x, y, TILEW, TILEW))
-				end
-			end
+
+	for i, tile in ipairs(room.tiles) do
+		local x = ((i - 1) % room.w) * TILEW
+		local y = 0
+		if i > 1 then
+			y = math.floor((i-1) / room.w) * TILEW
+		end
+		if tile >= 200  then
+			table.insert(self._boxes, BBox(x, y, TILEW, TILEW))
 		end
 	end
 end

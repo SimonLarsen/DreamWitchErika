@@ -1,6 +1,7 @@
 local Entity = require("Entity")
 local BoxCollider = require("BoxCollider")
 local Animator = require("Animator")
+local Slash = require("Slash")
 
 local Player = class("Player", Entity)
 
@@ -27,6 +28,7 @@ function Player:update(dt)
 	end
 
 	local state = 0
+	-- Move
 	self.xspeed = 0
 	if Input.static:isDown("left") then
 		self.xspeed = -Player.static.MOVE_SPEED
@@ -40,10 +42,18 @@ function Player:update(dt)
 	end
 	self.animator:setProperty("state", state)
 
+	-- Jump
 	if Input.static:wasPressed("up") and self.grounded then
 		self.yspeed = -Player.static.JUMP_POWER
 	end
 
+	-- Slash
+	if Input.static:wasPressed(" ") then
+		local slash = Slash(self.x+self.dir*10, self.y, self.dir)
+		self.scene:addEntity(slash)
+	end
+	
+	-- Update physics / collisions
 	local oldx = self.x
 	self.x = self.x + self.xspeed * dt
 	for i,v in ipairs(self.world:getBoxes()) do
@@ -66,7 +76,6 @@ function Player:update(dt)
 	end
 
 	self.animator:update(dt)
-	Camera.static:setPosition(self.x, self.y)
 end
 
 function Player:draw()

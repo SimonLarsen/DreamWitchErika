@@ -3,3 +3,7 @@ function math.sign(x)
 	elseif x > 0 then return 1
 	else return 0 end
 end
+
+function math.round(x)
+	return math.floor(x+0.5)
+end

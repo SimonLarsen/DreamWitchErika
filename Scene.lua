@@ -5,8 +5,15 @@ function Scene:initialize()
 end
 
 function Scene:update(dt)
+	-- Update entities
 	for i, v in ipairs(self._entities) do
 		v:update(dt)
+	end
+	-- Delete dead entities
+	for i=#self._entities, 1, -1 do
+		if self._entities[i]:isAlive() == false then
+			table.remove(self._entities, i)
+		end
 	end
 end
 
