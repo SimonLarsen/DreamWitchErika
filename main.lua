@@ -13,7 +13,7 @@ TILEW = 20
 function love.load()
 	love.window.setMode(WIDTH*SCALE, HEIGHT*SCALE)
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	love.graphics.setBackgroundColor(0, 0, 0)
+	love.graphics.setBackgroundColor(168, 216, 239)
 
 	gamestate.registerEvents()
 	gamestate.switch(require("GameScene")())

@@ -6,7 +6,7 @@ function CollisionHandler.static:CheckAll(entities)
 			if v.collider and w.collider then
 				local collision
 				if v.collider:getType() == "box" and w.collider:getType() == "box" then
-					collision = self.static:CheckBoxBox(v, w)
+					collision = self:CheckBoxBox(v, w)
 				end
 				if collision == true then
 					v:onCollide(w)
