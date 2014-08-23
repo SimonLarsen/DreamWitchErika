@@ -71,10 +71,8 @@ function Player:update(dt)
 	-- Update physics / collisions
 	local oldx = self.x
 	self.x = math.min(self.world:getRoom().w*TILEW-5, math.max(5, self.x + self.xspeed * dt))
-	for i,v in ipairs(self.world:getBoxes()) do
-		if v:collide(self.x-4, self.y-10, 8, 20) then
-			self.x = oldx
-		end
+	if self.world:collide(self.x-4, self.y-10, 8, 20) then
+		self.x = oldx
 	end
 
 	self.yspeed = self.yspeed + Player.static.GRAVITY*dt
@@ -82,13 +80,11 @@ function Player:update(dt)
 	local oldy = self.y
 	self.y = self.y + self.yspeed * dt
 	self.grounded = false
-	for i,v in ipairs(self.world:getBoxes()) do
-		if v:collide(self.x-4, self.y-10, 8, 20) then
-			self.grounded = true
-			self.djumped = false
-			self.y = oldy
-			self.yspeed = self.yspeed/2
-		end
+	if self.world:collide(self.x-4, self.y-10, 8, 20) then
+		self.grounded = true
+		self.djumped = false
+		self.y = oldy
+		self.yspeed = self.yspeed/2
 	end
 
 	if self.grounded == false then

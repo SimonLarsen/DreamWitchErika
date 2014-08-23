@@ -245,6 +245,17 @@ return {
           height = 40,
           visible = true,
           properties = {}
+        },
+        {
+          name = "slime",
+          type = "slime",
+          shape = "rectangle",
+          x = 300,
+          y = 160,
+          width = 20,
+          height = 20,
+          visible = true,
+          properties = {}
         }
       }
     }

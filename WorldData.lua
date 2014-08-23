@@ -9,6 +9,7 @@ function WorldData:initialize()
 	self._rooms = {}
 	self._spawns = {}
 	self._doors = {}
+	self._entities = {}
 	self._fgtiles = {}
 	self._bgtiles = {}
 	self._xtiles, self._ytiles = 0, 0
@@ -32,7 +33,11 @@ function WorldData:initialize()
 
 				elseif o.type == "spawn" then
 					local s = {x = o.x/TILEW, y = o.y/TILEW, id = o.name}
-					table.insert(self._spawns, s)
+					table.insert(self._spawns, o)
+
+				elseif o.type == "slime" then
+					print("slime", o.x, o.y)
+					table.insert(self._entities, o)
 				end
 			end
 		end

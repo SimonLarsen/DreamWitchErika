@@ -25,7 +25,7 @@ function World:initialize()
 	end
 
 	self._worlddata = WorldData()
-	self:spawnInRoom("tunnel")
+	self:spawnInRoom("start")
 end
 
 function World:spawnInRoom(id)
@@ -116,6 +116,15 @@ end
 function World:draw()
 	love.graphics.draw(self._bgbatch, 0, 0)
 	love.graphics.draw(self._fgbatch, 0, 0)
+end
+
+function World:collide(x, y, w, h)
+	for i,v in ipairs(self._boxes) do
+		if v:collide(x, y, w, h) then
+			return true
+		end
+	end
+	return false
 end
 
 function World:getBoxes()

@@ -28,7 +28,7 @@ end
 function Door:draw()
 	if self.blink > 0 then
 		love.graphics.draw(self.sprite, self.quad_open, self.x, self.y, 0, 1, 1, 20, 40)
-		if math.cos(self.blink*50) > 0 then
+		if math.cos(self.blink*50) < 0 then
 			love.graphics.setBlendMode("additive")
 			love.graphics.draw(self.sprite, self.quad_open, self.x, self.y, 0, 1, 1, 20, 40)
 			love.graphics.setBlendMode("alpha")
