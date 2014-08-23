@@ -18,6 +18,7 @@ function Player:initialize()
 	self.name = "player"
 	self.grounded = false
 	self.slash = 0
+	self.djumped = false
 
 	self.collider = BoxCollider(8, 20)
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
@@ -44,10 +45,15 @@ function Player:update(dt)
 	self.animator:setProperty("state", state)
 
 	-- Jump
-	if Input.static:wasPressed("up") and self.grounded then
+	if Input.static:wasPressed("up")
+	and (self.grounded == true or self.djumped == false) then
+		if self.grounded == false then
+			self.djumped = true
+		end
 		self.yspeed = -Player.static.JUMP_POWER
 	end
 
+	-- Slash
 	if self.slash > 0 then
 		self.slash = self.slash - dt
 		if self.slash <= 0 then
@@ -56,7 +62,6 @@ function Player:update(dt)
 		end
 	end
 
-	-- Slash
 	if Input.static:wasPressed(" ") and self.slash <= 0 then
 		self.slash = 0.3
 		self.animator:setProperty("swing", true)
@@ -79,6 +84,7 @@ function Player:update(dt)
 	for i,v in ipairs(self.world:getBoxes()) do
 		if v:collide(self.x-4, self.y-10, 8, 20) then
 			self.grounded = true
+			self.djumped = false
 			self.y = oldy
 			self.yspeed = self.yspeed/2
 		end

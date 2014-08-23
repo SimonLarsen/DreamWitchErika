@@ -23,14 +23,15 @@ function World:initialize()
 	end
 
 	self._worlddata = WorldData()
-	self._room = self._worlddata:getRoom("start")
+	self._room = self._worlddata:getRoom("tunnel")
 
-	self:buildSpriteBatch(self._room)
+	self:buildSpriteBatchs(self._room)
 	self:buildCollisionBoxes(self._room)
 end
 
-function World:buildSpriteBatch(room)
-	self._spritebatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
+function World:buildSpriteBatchs(room)
+	self._fgbatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
+	self._bgbatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
 
 	for i, tile in ipairs(room.fgtiles) do
 		local x = ((i - 1) % room.w) * TILEW
@@ -39,7 +40,18 @@ function World:buildSpriteBatch(room)
 			y = math.floor((i-1) / room.w) * TILEW
 		end
 		if tile > 0 then
-			self._spritebatch:add(self._quads[tile], x, y)
+			self._fgbatch:add(self._quads[tile], x, y)
+		end
+	end
+
+	for i, tile in ipairs(room.bgtiles) do
+		local x = ((i - 1) % room.w) * TILEW
+		local y = 0
+		if i > 1 then
+			y = math.floor((i-1) / room.w) * TILEW
+		end
+		if tile > 0 then
+			self._bgbatch:add(self._quads[tile], x, y)
 		end
 	end
 end
@@ -53,7 +65,7 @@ function World:buildCollisionBoxes(room)
 		if i > 1 then
 			y = math.floor((i-1) / room.w) * TILEW
 		end
-		if tile >= 200  then
+		if tile > 0  then
 			table.insert(self._boxes, BBox(x, y, TILEW, TILEW))
 		end
 	end
@@ -64,7 +76,8 @@ function World:update(dt)
 end
 
 function World:draw()
-	love.graphics.draw(self._spritebatch, 0, 0)
+	love.graphics.draw(self._bgbatch, 0, 0)
+	love.graphics.draw(self._fgbatch, 0, 0)
 end
 
 function World:getBoxes()
