@@ -40,6 +40,9 @@ function love.gui()
 end
 
 function love.keypressed(k)
+	if k == "escape" then
+		love.event.quit()
+	end
 	Input.static:keypressed(k)
 end
 
@@ -85,6 +88,7 @@ function love.run()
         if love.timer then
             love.timer.step()
             dt = love.timer.getDelta()
+			if dt > 1/12 then dt = 1/12 end
         end
 
         -- Call update and draw

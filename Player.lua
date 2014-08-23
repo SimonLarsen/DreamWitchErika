@@ -102,4 +102,8 @@ function Player:draw()
 	self.animator:draw(self.x, self.y, 0, self.dir, 1)
 end
 
+function Player:onCollide(collider)
+
+end
+
 return Player

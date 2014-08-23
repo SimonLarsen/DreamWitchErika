@@ -1,12 +1,14 @@
 local Entity = require("Entity")
 local BBox = require("BBox")
 local WorldData = require("WorldData")
+local Door = require("Door")
 
 local World = class("World", Entity)
 
 function World:initialize()
 	self.x, self.y, self.z = 0, 0, 100
 	self.name = "world"
+	self._room = nil
 
 	self._tileset = Resources.static:getImage("tiles.png")
 	local imgw = self._tileset:getWidth()
@@ -23,10 +25,46 @@ function World:initialize()
 	end
 
 	self._worlddata = WorldData()
-	self._room = self._worlddata:getRoom("tunnel")
+	self:spawnInRoom("tunnel")
+end
+
+function World:spawnInRoom(id)
+	self.scene = gamestate.current()
+	self:loadRoom(id)
+end
+
+function World:walkInRoom(id, door)
+	for i,v in ipairs(self.scene:getEntities()) do
+		if v.name ~= "player" and v.name ~= "world" then
+			v:kill()
+		end
+	end
+	
+	self:loadRoom(id)
+
+	local player = self.scene:find("player")
+	for i,v in ipairs(self._room.doors) do
+		if v.id == door.id then
+			if door.x == 0 then
+				player.x = v.x - 20
+				player.y = v.y+4
+			else
+				player.x = v.x + 20
+				player.y = v.y+4
+			end
+		end
+	end
+end
+
+function World:loadRoom(id)
+	self._room = self._worlddata:getRoom(id)
 
 	self:buildSpriteBatchs(self._room)
 	self:buildCollisionBoxes(self._room)
+
+	for i,v in ipairs(self._room.doors) do
+		self.scene:addEntity(Door(v.x, v.y, v.left, v.right, v.id))
+	end
 end
 
 function World:buildSpriteBatchs(room)

@@ -6,6 +6,7 @@ function Room:initialize(x, y, w, h, id)
 	self.id = id
 	self.fgtiles = {}
 	self.bgtiles = {}
+	self.doors = {}
 end
 
 return Room

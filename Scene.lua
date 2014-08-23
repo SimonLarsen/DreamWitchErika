@@ -1,4 +1,5 @@
 local Scene = class("Scene")
+local CollisionHandler = require("CollisionHandler")
 
 function Scene:initialize()
 	self._entities = {}
@@ -9,6 +10,10 @@ function Scene:update(dt)
 	for i, v in ipairs(self._entities) do
 		v:update(dt)
 	end
+
+	-- Check all vs. all collisions
+	CollisionHandler.static:checkAll(self._entities)
+
 	-- Delete dead entities
 	for i=#self._entities, 1, -1 do
 		if self._entities[i]:isAlive() == false then
@@ -30,6 +35,10 @@ function Scene:addEntity(e)
 	end)
 	e.scene = self
 	return e
+end
+
+function Scene:getEntities()
+	return self._entities
 end
 
 function Scene:find(name)

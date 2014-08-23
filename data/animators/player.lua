@@ -3,7 +3,7 @@ return {
 
 	states = {
 		["idle"] = { image = "idle.png", fw = 20, fh = 20, delay = 0.15 },
-		["run"] = { image = "run.png", fw = 20, fh = 20, delay = 0.15 },
+		["run"] = { image = "run.png", fw = 20, fh = 20, delay = 0.12 },
 		["swing"] = { image = "swing.png", fw = 20, fh = 20, delay = 0.1 },
 	},
 

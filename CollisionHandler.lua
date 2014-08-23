@@ -1,12 +1,14 @@
 local CollisionHandler = class("CollisionHandler")
 
-function CollisionHandler.static:CheckAll(entities)
-	for i,v in ipairs(entities) do
-		for j, w in ipairs(entities) do
+function CollisionHandler.static:checkAll(entities)
+	for i=1, #entities do
+		for j=i+1, #entities do
+			local v = entities[i]
+			local w = entities[j]
 			if v.collider and w.collider then
 				local collision
 				if v.collider:getType() == "box" and w.collider:getType() == "box" then
-					collision = self:CheckBoxBox(v, w)
+					collision = self:checkBoxBox(v, w)
 				end
 				if collision == true then
 					v:onCollide(w)
@@ -17,16 +19,17 @@ function CollisionHandler.static:CheckAll(entities)
 	end
 end
 
-function CollisionHandler.static:CheckBoxBox(a, b)
+function CollisionHandler.static:checkBoxBox(a, b)
 	local ca = a.collider
 	local cb = b.collider
 
-	if math.abs(a.x - b.x) > (ca.w+cb.w)/2
-	or math.abs(a.y - b.y) > (ca.h+cb.h)/2 then
+	if a.x-ca.w/2 > b.x+cb.w/2
+	or b.x-cb.w/2 > a.x+ca.w/2
+	or a.y-ca.h/2 > b.y+cb.h/2
+	or b.y-cb.h/2 > a.y+ca.h/2 then
 		return false
-	else
-		return true
 	end
+	return true
 end
 
 return CollisionHandler

@@ -27,12 +27,25 @@ function WorldData:initialize()
 					table.insert(self._rooms, r)
 
 				elseif o.type == "door" then
-					local d = {x = o.x/TILEW, y = o.y/TILEW}
+					local d = {x = o.x/TILEW+1, y = o.y/TILEW+1, id = o.name}
 					table.insert(self._doors, d)
 
 				elseif o.type == "spawn" then
-					local s = {x = o.x/TILEW, y = o.y/TILEW, id = tonumber(o.name)}
+					local s = {x = o.x/TILEW, y = o.y/TILEW, id = o.name}
 					table.insert(self._spawns, s)
+				end
+			end
+		end
+	end
+
+	-- Build doors
+	for i, door in ipairs(self._doors) do
+		for j, room in ipairs(self._rooms) do
+			if door.y >= room.y and door.y < room.y+room.h then
+				if door.x == room.x then
+					door.right = room.id
+				elseif door.x == room.x+room.w then	
+					door.left = room.id
 				end
 			end
 		end
@@ -40,11 +53,19 @@ function WorldData:initialize()
 
 	-- Build rooms
 	for i,v in ipairs(self._rooms) do
+		-- Setup tiles
 		for iy=v.y, v.y+v.h-1 do
 			for ix=v.x, v.x+v.w-1 do
 				local fg, bg = self:getTile(ix, iy)
 				table.insert(v.fgtiles, fg)
 				table.insert(v.bgtiles, bg)
+			end
+		end
+		-- Find doors
+		for j, w in ipairs(self._doors) do
+			if w.left == v.id or w.right == v.id then
+				local d = { x = (w.x-v.x)*TILEW, y = (w.y-v.y)*TILEW, left = w.left, right = w.right, id = w.id }
+				table.insert(v.doors, d)
 			end
 		end
 	end
