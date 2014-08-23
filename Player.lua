@@ -2,6 +2,7 @@ local Entity = require("Entity")
 local BoxCollider = require("BoxCollider")
 local Animator = require("Animator")
 local Slash = require("Slash")
+local CollisionHandler = require("CollisionHandler")
 
 local Player = class("Player", Entity)
 
@@ -30,6 +31,25 @@ function Player:update(dt)
 	end
 
 	local state = 0
+	-- Update physics / collisions
+	self.oldx = self.x
+	self.x = math.min(self.world:getRoom().w-5, math.max(5, self.x + self.xspeed * dt))
+	if self.world:collide(self.x-4, self.y-7, 8, 17) then
+		self.x = self.oldx
+	end
+
+	self.yspeed = self.yspeed + Player.static.GRAVITY*dt
+	self.yspeed = math.min(self.yspeed, Player.static.MAX_SPEED)
+	self.oldy = self.y
+	self.y = self.y + self.yspeed * dt
+	self.grounded = false
+	if self.world:collide(self.x-4, self.y-7, 8, 17) then
+		self.grounded = true
+		self.djumped = false
+		self.y = self.oldy
+		self.yspeed = self.yspeed/2
+	end
+
 	-- Move
 	self.xspeed = 0
 	if Input.static:isDown("left") then
@@ -42,7 +62,6 @@ function Player:update(dt)
 		self.dir = 1
 		state = 1
 	end
-	self.animator:setProperty("state", state)
 
 	-- Jump
 	if Input.static:wasPressed("up")
@@ -67,35 +86,16 @@ function Player:update(dt)
 		self.slash = 0.3
 		self.animator:setProperty("swing", true)
 	end
-	
-	-- Update physics / collisions
-	local oldx = self.x
-	self.x = math.min(self.world:getRoom().w*TILEW-5, math.max(5, self.x + self.xspeed * dt))
-	if self.world:collide(self.x-4, self.y-10, 8, 20) then
-		self.x = oldx
-	end
-
-	self.yspeed = self.yspeed + Player.static.GRAVITY*dt
-	self.yspeed = math.min(self.yspeed, Player.static.MAX_SPEED)
-	local oldy = self.y
-	self.y = self.y + self.yspeed * dt
-	self.grounded = false
-	if self.world:collide(self.x-4, self.y-10, 8, 20) then
-		self.grounded = true
-		self.djumped = false
-		self.y = oldy
-		self.yspeed = self.yspeed/2
-	end
 
 	if self.grounded == false then
-		self.animator:setProperty("state", 2)
+		state = 2
 	end
-
+	self.animator:setProperty("state", state)
 	self.animator:update(dt)
 
 	local room = self.world:getRoom()
-	local camx = math.min(room.w*TILEW-WIDTH/2, math.max(WIDTH/2, self.x))
-	local camy = math.min(room.h*TILEW-HEIGHT/2, math.max(HEIGHT/2, self.y))
+	local camx = math.min(room.w-WIDTH/2, math.max(WIDTH/2, self.x))
+	local camy = math.min(room.h-HEIGHT/2, math.max(HEIGHT/2, self.y))
 	Camera.static:setPosition(camx, camy)
 end
 
@@ -104,7 +104,17 @@ function Player:draw()
 end
 
 function Player:onCollide(collider)
-
+	if collider.name == "sandblock" then
+		if CollisionHandler.static:checkBoxBox(self, collider) then
+			self.x = self.oldx
+		end
+		if CollisionHandler.static:checkBoxBox(self, collider) then
+			self.y = self.oldy
+			self.yspeed = self.yspeed / 2
+			self.grounded = true
+			self.djumped = false
+		end
+	end
 end
 
 return Player

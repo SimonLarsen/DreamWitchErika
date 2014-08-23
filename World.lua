@@ -2,6 +2,8 @@ local Entity = require("Entity")
 local BBox = require("BBox")
 local WorldData = require("WorldData")
 local Door = require("Door")
+local Slime = require("slime")
+local SandBlock = require("SandBlock")
 
 local World = class("World", Entity)
 
@@ -65,17 +67,25 @@ function World:loadRoom(id)
 	for i,v in ipairs(self._room.doors) do
 		self.scene:addEntity(Door(v.x, v.y, v.left, v.right, v.id))
 	end
+	for i,v in ipairs(self._room.entities) do
+		if v.type == "slime" then
+			self.scene:addEntity(Slime(v.x+TILEW/2, v.y+TILEW/2))
+		elseif v.type == "sandblock" then
+			self.scene:addEntity(SandBlock(v.x+TILEW/2, v.y+TILEW/2))
+		end
+	end
 end
 
 function World:buildSpriteBatchs(room)
 	self._fgbatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
 	self._bgbatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
 
+	local xtiles = room.w / TILEW
 	for i, tile in ipairs(room.fgtiles) do
-		local x = ((i - 1) % room.w) * TILEW
+		local x = ((i - 1) % xtiles) * TILEW
 		local y = 0
 		if i > 1 then
-			y = math.floor((i-1) / room.w) * TILEW
+			y = math.floor((i-1) / xtiles) * TILEW
 		end
 		if tile > 0 then
 			self._fgbatch:add(self._quads[tile], x, y)
@@ -83,10 +93,10 @@ function World:buildSpriteBatchs(room)
 	end
 
 	for i, tile in ipairs(room.bgtiles) do
-		local x = ((i - 1) % room.w) * TILEW
+		local x = ((i - 1) % xtiles) * TILEW
 		local y = 0
 		if i > 1 then
-			y = math.floor((i-1) / room.w) * TILEW
+			y = math.floor((i-1) / xtiles) * TILEW
 		end
 		if tile > 0 then
 			self._bgbatch:add(self._quads[tile], x, y)
@@ -97,11 +107,12 @@ end
 function World:buildCollisionBoxes(room)
 	self._boxes = {}
 
+	local xtiles = room.w / TILEW
 	for i, tile in ipairs(room.fgtiles) do
-		local x = ((i - 1) % room.w) * TILEW
+		local x = ((i - 1) % xtiles) * TILEW
 		local y = 0
 		if i > 1 then
-			y = math.floor((i-1) / room.w) * TILEW
+			y = math.floor((i-1) / xtiles) * TILEW
 		end
 		if tile > 0  then
 			table.insert(self._boxes, BBox(x, y, TILEW, TILEW))

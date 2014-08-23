@@ -1,7 +1,6 @@
 local Scene = require("Scene")
 local World = require("World")
 local Player = require("Player")
-local Slime = require("Slime")
 
 local GameScene = class("GameScene", Scene)
 

@@ -20,15 +20,11 @@ function CollisionHandler.static:checkAll(entities)
 end
 
 function CollisionHandler.static:checkBoxBox(a, b)
-	local ca = a.collider
-	local cb = b.collider
-
-	if a.x-ca.w/2 > b.x+cb.w/2
-	or b.x-cb.w/2 > a.x+ca.w/2
-	or a.y-ca.h/2 > b.y+cb.h/2
-	or b.y-cb.h/2 > a.y+ca.h/2 then
+	if math.abs(a.x - b.x) > (a.collider.w+b.collider.w)/2
+	or math.abs(a.y - b.y) > (a.collider.h+b.collider.h)/2 then
 		return false
 	end
+
 	return true
 end
 

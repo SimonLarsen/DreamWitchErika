@@ -1,6 +1,6 @@
 local Animation = class("Animation")
 
-function Animation:initialize(image, fw, fh, delay, ox, oy)
+function Animation:initialize(image, fw, fh, delay, loop, ox, oy)
 	self._image = image
 
 	local imgw = image:getWidth()
@@ -20,7 +20,11 @@ function Animation:initialize(image, fw, fh, delay, ox, oy)
 	self._frames = xframes * yframes
 	self._delay = delay
 	self._speed = 1
-	self._loop = true
+	if loop ~= nil then
+		self._loop = loop
+	else
+		self._loop = true
+	end
 	self._ox = ox or (fw/2)
 	self._oy = oy or (fh/2)
 	self:reset()

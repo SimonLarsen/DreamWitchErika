@@ -24,19 +24,18 @@ function WorldData:initialize()
 		elseif v.name == "OBJ" then
 			for j, o in ipairs(v.objects) do
 				if o.type == "room" then
-					local r = Room(o.x/TILEW, o.y/TILEW, o.width/TILEW, o.height/TILEW, o.name)
+					local r = Room(o.x, o.y, o.width, o.height, o.name)
 					table.insert(self._rooms, r)
 
 				elseif o.type == "door" then
-					local d = {x = o.x/TILEW+1, y = o.y/TILEW+2, id = o.name}
+					local d = {x = o.x+o.width/2, y = o.y+o.height/2, id = o.name}
 					table.insert(self._doors, d)
 
 				elseif o.type == "spawn" then
-					local s = {x = o.x/TILEW, y = o.y/TILEW, id = o.name}
+					local s = {x = o.x+o.width/2, y = o.y+o.height/2, id = o.name}
 					table.insert(self._spawns, o)
 
-				elseif o.type == "slime" then
-					print("slime", o.x, o.y)
+				else
 					table.insert(self._entities, o)
 				end
 			end
@@ -57,20 +56,30 @@ function WorldData:initialize()
 	end
 
 	-- Build rooms
-	for i,v in ipairs(self._rooms) do
+	for i, room in ipairs(self._rooms) do
 		-- Setup tiles
-		for iy=v.y, v.y+v.h-1 do
-			for ix=v.x, v.x+v.w-1 do
+		local cx, cy = room.x/TILEW, room.y/TILEW
+		local cw, ch = room.w/TILEW, room.h/TILEW
+		for iy=cy, cy+ch-1 do
+			for ix=cx, cx+cw-1 do
 				local fg, bg = self:getTile(ix, iy)
-				table.insert(v.fgtiles, fg)
-				table.insert(v.bgtiles, bg)
+				table.insert(room.fgtiles, fg)
+				table.insert(room.bgtiles, bg)
 			end
 		end
-		-- Find doors
-		for j, w in ipairs(self._doors) do
-			if w.left == v.id or w.right == v.id then
-				local d = { x = (w.x-v.x)*TILEW, y = (w.y-v.y)*TILEW, left = w.left, right = w.right, id = w.id }
-				table.insert(v.doors, d)
+		-- Find doors and entities in room
+		for j, door in ipairs(self._doors) do
+			if door.left == room.id or door.right == room.id then
+				local d = { x = door.x-room.x, y = door.y-room.y, left = door.left, right = door.right, id = door.id }
+				table.insert(room.doors, d)
+			end
+		end
+
+		for j, e in ipairs(self._entities) do
+			if e.x >= room.x and e.x <= room.x+room.w
+			and e.y >= room.y and e.y <= room.y+room.h then
+				local newe = { x = e.x-room.x, y = e.y-room.y, type = e.type, id = e.id }
+				table.insert(room.entities, newe)
 			end
 		end
 	end

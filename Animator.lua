@@ -8,7 +8,7 @@ function Animator:initialize(animator)
 
 	self._animations = {}
 	for i,v in pairs(self._states) do
-		self._animations[i] = Animation(Resources.static:getImage(v.image), v.fw, v.fh, v.delay)
+		self._animations[i] = Animation(Resources.static:getImage(v.image), v.fw, v.fh, v.delay, v.loop)
 	end
 
 	self._properties = {}
