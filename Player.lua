@@ -51,6 +51,7 @@ function Player:update(dt)
 			self.djumped = true
 		end
 		self.yspeed = -Player.static.JUMP_POWER
+		self.animator:setProperty("jump", true)
 	end
 
 	-- Slash
@@ -69,7 +70,7 @@ function Player:update(dt)
 	
 	-- Update physics / collisions
 	local oldx = self.x
-	self.x = self.x + self.xspeed * dt
+	self.x = math.min(self.world:getRoom().w*TILEW-5, math.max(5, self.x + self.xspeed * dt))
 	for i,v in ipairs(self.world:getBoxes()) do
 		if v:collide(self.x-4, self.y-10, 8, 20) then
 			self.x = oldx
@@ -88,6 +89,10 @@ function Player:update(dt)
 			self.y = oldy
 			self.yspeed = self.yspeed/2
 		end
+	end
+
+	if self.grounded == false then
+		self.animator:setProperty("state", 2)
 	end
 
 	self.animator:update(dt)

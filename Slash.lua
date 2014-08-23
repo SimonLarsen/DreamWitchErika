@@ -1,5 +1,6 @@
 local Entity = require("Entity")
 local Animation = require("Animation")
+local BoxCollider = require("BoxCollider")
 
 local Slash = class("Slash", Entity)
 
@@ -8,6 +9,8 @@ function Slash:initialize(x, y, dir, xspeed)
 	self.xspeed = xspeed or 0
 	self.dir = dir
 	self.time = 0
+	self.name = "slash"
+	self.collider = BoxCollider(11, 17)
 
 	local sprite = Resources.static:getImage("slash.png")
 	self.anim = Animation(sprite, 11, 17, 0.0667, 5, 8)

@@ -27,7 +27,7 @@ function WorldData:initialize()
 					table.insert(self._rooms, r)
 
 				elseif o.type == "door" then
-					local d = {x = o.x/TILEW+1, y = o.y/TILEW+1, id = o.name}
+					local d = {x = o.x/TILEW+1, y = o.y/TILEW+2, id = o.name}
 					table.insert(self._doors, d)
 
 				elseif o.type == "spawn" then

@@ -46,11 +46,11 @@ function World:walkInRoom(id, door)
 	for i,v in ipairs(self._room.doors) do
 		if v.id == door.id then
 			if door.x == 0 then
-				player.x = v.x - 20
-				player.y = v.y+4
+				player.x = v.x - 10
+				player.y = v.y+24
 			else
-				player.x = v.x + 20
-				player.y = v.y+4
+				player.x = v.x + 10
+				player.y = v.y+24
 			end
 		end
 	end
