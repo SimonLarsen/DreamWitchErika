@@ -33,8 +33,7 @@ function WorldData:initialize()
 
 				elseif o.type == "spawn" then
 					local s = {x = o.x+o.width/2, y = o.y+o.height/2, id = o.name}
-					table.insert(self._spawns, o)
-
+					table.insert(self._spawns, s)
 				else
 					table.insert(self._entities, o)
 				end
@@ -80,6 +79,15 @@ function WorldData:initialize()
 			and e.y >= room.y and e.y <= room.y+room.h then
 				local newe = { x = e.x-room.x, y = e.y-room.y, type = e.type, id = e.id }
 				table.insert(room.entities, newe)
+			end
+		end
+
+		for j, spawn in ipairs(self._spawns) do
+			if spawn.x >= room.x and spawn.x <= room.x+room.w
+			and spawn.y >= room.y and spawn.y <= room.y+room.h then
+				spawn.x = spawn.x - room.x
+				spawn.y = spawn.y - room.y
+				spawn.room = room.id
 			end
 		end
 	end

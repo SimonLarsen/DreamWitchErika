@@ -1,5 +1,7 @@
 local Entity = class("Entity")
 
+Entity.static.next_id = 0
+
 function Entity:enter()
 	self.x, self.y, self.z = 0, 0, 0
 
@@ -28,6 +30,12 @@ end
 
 function Entity:isAlive()
 	return self._alive
+end
+
+function Entity.static:getId()
+	local id = "id" .. self.next_id
+	self.next_id = self.next_id + 1
+	return id
 end
 
 return Entity

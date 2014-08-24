@@ -45,8 +45,21 @@ function World:goToRoom(id, door)
 end
 
 function World:spawnInRoom(id)
+	local room, spawn
+	for i,v in ipairs(self._worlddata:getSpawns()) do
+		if v.id == id then
+			room = v.room
+			spawn = v
+			break
+		end
+	end
+	assert(room, "No spawn found")
 	self.scene = gamestate.current()
-	self:loadRoom(id)
+	self:loadRoom(room)
+
+	local player = self.scene:find("player")
+	player.x = spawn.x
+	player.y = spawn.y
 end
 
 function World:walkInRoom(id, door)

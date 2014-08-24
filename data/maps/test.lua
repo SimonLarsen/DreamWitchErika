@@ -159,7 +159,7 @@ return {
       properties = {},
       objects = {
         {
-          name = "start",
+          name = "",
           type = "room",
           shape = "rectangle",
           x = 0,
@@ -170,7 +170,7 @@ return {
           properties = {}
         },
         {
-          name = "tunnel",
+          name = "",
           type = "room",
           shape = "rectangle",
           x = 440,
@@ -181,7 +181,7 @@ return {
           properties = {}
         },
         {
-          name = "hardtoget",
+          name = "",
           type = "room",
           shape = "rectangle",
           x = 760,
@@ -192,7 +192,7 @@ return {
           properties = {}
         },
         {
-          name = "1",
+          name = "",
           type = "door",
           shape = "rectangle",
           x = 420,
@@ -203,7 +203,7 @@ return {
           properties = {}
         },
         {
-          name = "2",
+          name = "",
           type = "door",
           shape = "rectangle",
           x = 420,
@@ -214,7 +214,7 @@ return {
           properties = {}
         },
         {
-          name = "3",
+          name = "",
           type = "door",
           shape = "rectangle",
           x = 740,
@@ -225,7 +225,7 @@ return {
           properties = {}
         },
         {
-          name = "4",
+          name = "",
           type = "door",
           shape = "rectangle",
           x = 740,
@@ -236,7 +236,7 @@ return {
           properties = {}
         },
         {
-          name = "1",
+          name = "start",
           type = "spawn",
           shape = "rectangle",
           x = 40,
