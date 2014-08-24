@@ -28,6 +28,12 @@ function Scene:draw()
 	end
 end
 
+function Scene:gui()
+	for i,v in ipairs(self._entities) do
+		v:gui()
+	end
+end
+
 function Scene:addEntity(e)
 	table.insert(self._entities, e)
 	table.sort(self._entities, function(a,b)

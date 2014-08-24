@@ -4,6 +4,7 @@ gamestate = require("hump.gamestate")
 Resources = require("Resources")
 Camera = require("Camera")
 Input = require("Input")
+Timer = require("hump.timer")
 
 WIDTH = 320
 HEIGHT = 180
@@ -22,7 +23,7 @@ function love.load()
 end
 
 function love.update(dt)
-
+	Timer.update(dt)
 end
 
 function love.draw()
@@ -35,6 +36,7 @@ end
 
 function love.gui()
 	love.graphics.pop()
+	gamestate.current():gui()
 end
 
 function love.keypressed(k)

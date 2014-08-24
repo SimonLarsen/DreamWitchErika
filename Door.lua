@@ -49,9 +49,9 @@ function Door:onCollide(collider)
 		local world = self.scene:find("world")
 		local player = self.scene:find("player")
 		if world:getRoom().id == self.left then
-			world:walkInRoom(self.right, self)
+			world:goToRoom(self.right, self)
 		else
-			world:walkInRoom(self.left, self)
+			world:goToRoom(self.left, self)
 		end
 	end
 end

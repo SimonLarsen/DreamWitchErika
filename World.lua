@@ -5,6 +5,7 @@ local Door = require("Door")
 local Slime = require("slime")
 local SandBlock = require("SandBlock")
 local EntityFactory = require("EntityFactory")
+local Fade = require("Fade")
 
 local World = class("World", Entity)
 
@@ -12,6 +13,7 @@ function World:initialize()
 	self.x, self.y, self.z = 0, 0, 100
 	self.name = "world"
 	self._room = nil
+	self.fading = false
 
 	self._tileset = Resources.static:getImage("tiles.png")
 	local imgw = self._tileset:getWidth()
@@ -29,6 +31,17 @@ function World:initialize()
 
 	self._worlddata = WorldData()
 	self:spawnInRoom("start")
+end
+
+function World:goToRoom(id, door)
+	if self.fading then return end
+	self.scene:addEntity(Fade(Fade.static.TO_BLACK, 1))
+	self.fading = true
+	Timer.add(0.99, function()
+		self:walkInRoom(id, door)
+		self.scene:addEntity(Fade(Fade.static.FROM_BLACK, 1))
+		self.fading = false
+	end)
 end
 
 function World:spawnInRoom(id)

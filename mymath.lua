@@ -7,3 +7,7 @@ end
 function math.round(x)
 	return math.floor(x+0.5)
 end
+
+function math.cap(x, min, max)
+	return math.min(max, math.max(min, x))
+end

@@ -14,6 +14,10 @@ function Entity:draw()
 	
 end
 
+function Entity:gui()
+	
+end
+
 function Entity:onCollide(collider)
 	
 end
