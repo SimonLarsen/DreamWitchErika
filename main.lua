@@ -7,7 +7,7 @@ Input = require("Input")
 
 WIDTH = 320
 HEIGHT = 180
-SCALE = 3
+SCALE = 2
 TILEW = 20
 
 function love.load()
@@ -35,8 +35,6 @@ end
 
 function love.gui()
 	love.graphics.pop()
-
-	love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 0)
 end
 
 function love.keypressed(k)

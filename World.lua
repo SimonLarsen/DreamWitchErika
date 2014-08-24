@@ -4,6 +4,7 @@ local WorldData = require("WorldData")
 local Door = require("Door")
 local Slime = require("slime")
 local SandBlock = require("SandBlock")
+local EntityFactory = require("EntityFactory")
 
 local World = class("World", Entity)
 
@@ -68,11 +69,8 @@ function World:loadRoom(id)
 		self.scene:addEntity(Door(v.x, v.y, v.left, v.right, v.id))
 	end
 	for i,v in ipairs(self._room.entities) do
-		if v.type == "slime" then
-			self.scene:addEntity(Slime(v.x+TILEW/2, v.y+TILEW/2))
-		elseif v.type == "sandblock" then
-			self.scene:addEntity(SandBlock(v.x+TILEW/2, v.y+TILEW/2))
-		end
+		local e = EntityFactory.static:create(v.type, v.x+TILEW/2, v.y+TILEW/2)
+		self.scene:addEntity(e)
 	end
 end
 

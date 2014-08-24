@@ -9,7 +9,7 @@ Slime.static.JUMP_POWER_X = 100
 Slime.static.JUMP_POWER_Y = 180
 
 function Slime:initialize(x, y, dir)
-	self.x, self.y = x,y
+	self.x, self.y = x, y-1
 	self.z = 0
 	self.name = "slime"
 	self.dir = dir
