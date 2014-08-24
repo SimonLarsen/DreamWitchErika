@@ -8,9 +8,12 @@ local CollisionHandler = require("CollisionHandler")
 local Player = class("Player", Entity)
 
 Player.static.MOVE_SPEED = 100
+Player.static.COOLDOWN = 0.5
 Player.static.GRAVITY = 600
 Player.static.JUMP_POWER = 230
 Player.static.MAX_SPEED = 200
+Player.static.DASH_SPEED = 600
+Player.static.DASH_TIME = 0.07
 
 function Player:initialize()
 	self.x, self.y, self.z = 0, 0, 0
@@ -22,6 +25,7 @@ function Player:initialize()
 	self.slash = 0
 	self.djumped = true
 	self.cooldown = 0
+	self.dashing = 0
 
 	self.collider = BoxCollider(8, 20)
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
@@ -33,13 +37,38 @@ function Player:update(dt)
 	end
 
 	local state = 0
-	-- Update physics / collisions
-	self.oldx = self.x
-	self.x = math.min(self.world:getRoom().w-5, math.max(5, self.x + self.xspeed * dt))
-	if self.world:collide(self.x-4, self.y-7, 8, 17) then
-		self.x = self.oldx
+
+	-- Move
+	self.xspeed = 0
+	if Input.static:isDown("a") then
+		self.xspeed = -Player.static.MOVE_SPEED
+		self.dir = -1
+		state = 1
+	end
+	if Input.static:isDown("d") then
+		self.xspeed = Player.static.MOVE_SPEED
+		self.dir = 1
+		state = 1
 	end
 
+	-- Jump
+	if (Input.static:wasPressed("w") or Input.static:wasPressed("k"))
+	and (self.grounded == true or self.djumped == false) then
+		if self.grounded == false then
+			self.djumped = true
+		end
+		self.yspeed = -Player.static.JUMP_POWER
+		self.animator:setProperty("jump", true)
+	end
+
+	-- Dash
+	if Input.static:wasPressed("l")
+	and self.dashing <= 0 and self.cooldown <= 0 then
+		self.dashing = Player.static.DASH_TIME
+		self.animator:setProperty("dash", true)
+	end
+
+	-- Update physics / collisions
 	self.yspeed = self.yspeed + Player.static.GRAVITY*dt
 	self.yspeed = math.min(self.yspeed, Player.static.MAX_SPEED)
 	self.oldy = self.y
@@ -54,27 +83,15 @@ function Player:update(dt)
 		self.yspeed = self.yspeed/2
 	end
 
-	-- Move
-	self.xspeed = 0
-	if Input.static:isDown("left") then
-		self.xspeed = -Player.static.MOVE_SPEED
-		self.dir = -1
-		state = 1
+	if self.dashing > 0 then
+		self.dashing = self.dashing - dt
+		self.yspeed = 0
+		self.xspeed = self.dir * Player.static.DASH_SPEED
 	end
-	if Input.static:isDown("right") then
-		self.xspeed = Player.static.MOVE_SPEED
-		self.dir = 1
-		state = 1
-	end
-
-	-- Jump
-	if Input.static:wasPressed("up")
-	and (self.grounded == true or self.djumped == false) then
-		if self.grounded == false then
-			self.djumped = true
-		end
-		self.yspeed = -Player.static.JUMP_POWER
-		self.animator:setProperty("jump", true)
+	self.oldx = self.x
+	self.x = math.min(self.world:getRoom().w-5, math.max(5, self.x + self.xspeed * dt))
+	if self.world:collide(self.x-4, self.y-7, 8, 17) then
+		self.x = self.oldx
 	end
 
 	-- Slash
@@ -95,7 +112,7 @@ function Player:update(dt)
 		self.cooldown = self.cooldown - dt
 	end
 
-	if Input.static:wasPressed(" ") and self.slash <= 0 and self.cooldown <= 0 then
+	if Input.static:wasPressed("j") and self.slash <= 0 and self.cooldown <= 0 then
 		if Preferences.static:get("has_superslash") == true then
 			self.animator:setProperty("superswing", true)
 			self.slash = 0.1
@@ -103,7 +120,7 @@ function Player:update(dt)
 			self.animator:setProperty("swing", true)
 			self.slash = 0.3
 		end
-		self.cooldown = 0.5
+		self.cooldown = Player.static.COOLDOWN
 	end
 
 	if self.grounded == false then

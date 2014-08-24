@@ -9,6 +9,7 @@ return {
 		["jump"] = { image = "jump.png", fw = 20, fh = 20, delay = 0.08 },
 		["fly"] = { image = "fly.png", fw = 20, fh = 20, delay = 0.1 },
 		["land"] = { image = "land.png", fw = 20, fh = 20, delay = 0.08 },
+		["dash"] = { image = "dash.png", fw = 20, fh = 20, delay = 0.1 },
 	},
 
 	properties = {
@@ -19,6 +20,7 @@ return {
 		["swing"] = { value = false, isTrigger = true },
 		["superswing"] = { value = false, isTrigger = true },
 		["jump"] = { value = false, isTrigger = true },
+		["dash"] = { value = false, isTrigger = true },
 	},
 
 	transitions = {
@@ -49,6 +51,14 @@ return {
 		{
 			from = "any", to = "jump",
 			property = "jump", value = true
+		},
+		{
+			from = "any", to = "dash",
+			property = "dash", value = true
+		},
+		{
+			from = "dash", to = "idle",
+			property = "_finished", value = true
 		},
 		{
 			from = "jump", to = "fly",
