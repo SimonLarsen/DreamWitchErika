@@ -2,6 +2,7 @@ local Entity = require("Entity")
 local BBox = require("BBox")
 local WorldData = require("WorldData")
 local Door = require("Door")
+local BlackDoor = require("BlackDoor")
 local Slime = require("slime")
 local SandBlock = require("SandBlock")
 local EntityFactory = require("EntityFactory")
@@ -53,7 +54,8 @@ function World:spawnInRoom(id)
 			break
 		end
 	end
-	assert(room, "No spawn found")
+	assert(spawn, "Spawn \""..spawn.id.." not found")
+	assert(room, "Spawn room not found")
 	self.scene = gamestate.current()
 	self:loadRoom(room)
 
@@ -92,7 +94,11 @@ function World:loadRoom(id)
 	self:buildCollisionBoxes(self._room)
 
 	for i,v in ipairs(self._room.doors) do
-		self.scene:addEntity(Door(v.x, v.y, v.left, v.right, v.id))
+		if v.black == true then
+			self.scene:addEntity(BlackDoor(v.x, v.y, v.left, v.right, v.id))
+		else
+			self.scene:addEntity(Door(v.x, v.y, v.left, v.right, v.id))
+		end
 	end
 	for i,v in ipairs(self._room.entities) do
 		local e = EntityFactory.static:create(v.type, v.x+TILEW/2, v.y+TILEW/2)

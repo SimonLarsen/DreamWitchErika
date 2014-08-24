@@ -21,6 +21,7 @@ function Player:initialize()
 	self.grounded = false
 	self.slash = 0
 	self.djumped = true
+	self.cooldown = 0
 
 	self.collider = BoxCollider(8, 20)
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
@@ -82,7 +83,7 @@ function Player:update(dt)
 		if self.slash <= 0 then
 			local slash
 			if Preferences.static:get("has_superslash") == true then
-				slash = SuperSlash(self.x+self.dir*16, self.y, self.dir, self.xspeed)
+				slash = SuperSlash(self.x-self.dir*4, self.y, self.dir, self.xspeed)
 			else
 				slash = Slash(self.x+self.dir*12, self.y, self.dir, self.xspeed)
 			end
@@ -90,9 +91,19 @@ function Player:update(dt)
 		end
 	end
 
-	if Input.static:wasPressed(" ") and self.slash <= 0 then
-		self.slash = 0.3
-		self.animator:setProperty("swing", true)
+	if self.cooldown > 0 then
+		self.cooldown = self.cooldown - dt
+	end
+
+	if Input.static:wasPressed(" ") and self.slash <= 0 and self.cooldown <= 0 then
+		if Preferences.static:get("has_superslash") == true then
+			self.animator:setProperty("superswing", true)
+			self.slash = 0.1
+		else
+			self.animator:setProperty("swing", true)
+			self.slash = 0.3
+		end
+		self.cooldown = 0.5
 	end
 
 	if self.grounded == false then

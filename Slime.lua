@@ -6,7 +6,7 @@ local Slime = class("Slime", Entity)
 
 Slime.static.GRAVITY = 600
 Slime.static.JUMP_POWER_X = 100
-Slime.static.JUMP_POWER_Y = 180
+Slime.static.JUMP_POWER_Y = 100
 
 function Slime:initialize(x, y, dir)
 	self.x, self.y = x, y-1
@@ -42,10 +42,10 @@ function Slime:update(dt)
 
 	if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
 
-	if math.abs(self.y-self.player.y) < 20 and math.abs(self.x-self.player.x) < 50
+	if math.abs(self.y-self.player.y) < 20 and math.abs(self.x-self.player.x) < 140
 	and self.grounded and self.cooldown <= 0 then
 		self.dir = math.sign(self.player.x - self.x)
-		self.xspeed = (self.player.x - self.x) * 3
+		self.xspeed = Slime.static.JUMP_POWER_X*self.dir
 		self.yspeed = -Slime.static.JUMP_POWER_Y
 		self.cooldown = 1
 	end

@@ -4,7 +4,7 @@ local Entity = require("Entity")
 local WorldData = class("WorldData")
 
 function WorldData:initialize()
-	local chunk = love.filesystem.load("data/maps/test.lua")
+	local chunk = love.filesystem.load("data/maps/map.lua")
 	local data = chunk()
 
 	self._rooms = {}
@@ -29,7 +29,11 @@ function WorldData:initialize()
 					table.insert(self._rooms, r)
 
 				elseif o.type == "door" then
-					local d = {x = o.x+o.width/2, y = o.y+o.height/2, id = o.name}
+					local d = {x = o.x+o.width/2, y = o.y+o.height/2, id = Entity.static:getId(), black=false}
+					table.insert(self._doors, d)
+
+				elseif o.type == "blackdoor" then
+					local d = {x = o.x+o.width/2, y = o.y+o.height/2, id = Entity.static:getId(), black=true}
 					table.insert(self._doors, d)
 
 				elseif o.type == "spawn" then
@@ -70,7 +74,7 @@ function WorldData:initialize()
 		-- Find doors and entities in room
 		for j, door in ipairs(self._doors) do
 			if door.left == room.id or door.right == room.id then
-				local d = { x = door.x-room.x, y = door.y-room.y, left = door.left, right = door.right, id = door.id }
+				local d = { x = door.x-room.x, y = door.y-room.y, left = door.left, right = door.right, id = door.id, black = door.black }
 				table.insert(room.doors, d)
 			end
 		end
@@ -84,7 +88,8 @@ function WorldData:initialize()
 		end
 
 		for j, spawn in ipairs(self._spawns) do
-			if spawn.x >= room.x and spawn.x <= room.x+room.w
+			if spawn.room == nil 
+			and spawn.x >= room.x and spawn.x <= room.x+room.w
 			and spawn.y >= room.y and spawn.y <= room.y+room.h then
 				spawn.x = spawn.x - room.x
 				spawn.y = spawn.y - room.y

@@ -9,19 +9,19 @@ Preferences = require("Preferences")
 
 WIDTH = 320
 HEIGHT = 180
-SCALE = 2
+SCALE = 3
 TILEW = 20
 
 function love.load()
 	love.window.setMode(WIDTH*SCALE, HEIGHT*SCALE)
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	love.graphics.setBackgroundColor(168, 216, 239)
+	love.graphics.setBackgroundColor(123, 213, 220)
 
 	gamestate.registerEvents()
 	gamestate.switch(require("GameScene")())
 
 	Preferences.static:load()
-	Preferences.static:set("has_superslash", true)
+	Preferences.static:set("has_superslash", false)
 	Preferences.static:set("has_djump", true)
 
 	Camera.static.zoom = SCALE
