@@ -5,6 +5,7 @@ Resources = require("Resources")
 Camera = require("Camera")
 Input = require("Input")
 Timer = require("hump.timer")
+Preferences = require("Preferences")
 
 WIDTH = 320
 HEIGHT = 180
@@ -18,6 +19,10 @@ function love.load()
 
 	gamestate.registerEvents()
 	gamestate.switch(require("GameScene")())
+
+	Preferences.static:load()
+	Preferences.static:set("has_superslash", true)
+	Preferences.static:set("has_djump", true)
 
 	Camera.static.zoom = SCALE
 end

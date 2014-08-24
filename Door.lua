@@ -41,7 +41,7 @@ function Door:draw()
 end
 
 function Door:onCollide(collider)
-	if collider.name == "slash" and self.open == false then
+	if (collider.name == "slash" or collider.name == "superslash") and self.open == false then
 		self.open = true
 		self.collider.w = 10
 		self.blink = 0.5

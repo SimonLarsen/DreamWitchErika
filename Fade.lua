@@ -22,7 +22,6 @@ end
 
 function Fade:gui()
 	local a = self.time / self.duration
-	print(a)
 	if self.direction == Fade.static.TO_BLACK then
 		a = 1-a
 	end

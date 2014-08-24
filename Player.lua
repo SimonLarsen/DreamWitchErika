@@ -2,6 +2,7 @@ local Entity = require("Entity")
 local BoxCollider = require("BoxCollider")
 local Animator = require("Animator")
 local Slash = require("Slash")
+local SuperSlash = require("SuperSlash")
 local CollisionHandler = require("CollisionHandler")
 
 local Player = class("Player", Entity)
@@ -19,7 +20,7 @@ function Player:initialize()
 	self.name = "player"
 	self.grounded = false
 	self.slash = 0
-	self.djumped = false
+	self.djumped = true
 
 	self.collider = BoxCollider(8, 20)
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
@@ -45,7 +46,9 @@ function Player:update(dt)
 	self.grounded = false
 	if self.world:collide(self.x-4, self.y-7, 8, 17) then
 		self.grounded = true
-		self.djumped = false
+		if Preferences.static:get("has_djump") == true then
+			self.djumped = false
+		end
 		self.y = self.oldy
 		self.yspeed = self.yspeed/2
 	end
@@ -77,7 +80,12 @@ function Player:update(dt)
 	if self.slash > 0 then
 		self.slash = self.slash - dt
 		if self.slash <= 0 then
-			local slash = Slash(self.x+self.dir*12, self.y, self.dir, self.xspeed)
+			local slash
+			if Preferences.static:get("has_superslash") == true then
+				slash = SuperSlash(self.x+self.dir*16, self.y, self.dir, self.xspeed)
+			else
+				slash = Slash(self.x+self.dir*12, self.y, self.dir, self.xspeed)
+			end
 			self.scene:addEntity(slash)
 		end
 	end
@@ -107,12 +115,6 @@ function Player:onCollide(collider)
 	if collider.name == "sandblock" then
 		if CollisionHandler.static:checkBoxBox(self, collider) then
 			self.x = self.oldx
-		end
-		if CollisionHandler.static:checkBoxBox(self, collider) then
-			self.y = self.oldy
-			self.yspeed = self.yspeed / 2
-			self.grounded = true
-			self.djumped = false
 		end
 	end
 end

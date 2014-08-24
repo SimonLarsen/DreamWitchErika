@@ -248,20 +248,9 @@ return {
         },
         {
           name = "",
-          type = "spike",
+          type = "slime",
           shape = "rectangle",
-          x = 180,
-          y = 160,
-          width = 20,
-          height = 20,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "spike",
-          shape = "rectangle",
-          x = 220,
+          x = 260,
           y = 160,
           width = 20,
           height = 20,

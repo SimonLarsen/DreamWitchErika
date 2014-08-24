@@ -88,6 +88,11 @@ function Slime:onCollide(collider)
 		if self.health <= 0 then
 			self.animator:setProperty("die", true)
 		end
+	elseif collider.name == "superslash" then
+		self.cooldown = 1
+		self.blink = 0.5
+		self.health = 0
+		self.animator:setProperty("die", true)
 	end
 end
 
