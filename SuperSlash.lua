@@ -6,8 +6,8 @@ local SuperSlash = class("SuperSlash", Entity)
 
 function SuperSlash:initialize(x, y, dir, xspeed)
 	self.x, self.y, self.z = x, y, -1
-	self.xspeed = xspeed or 0
 	self.dir = dir
+	self.xspeed = self.dir * 200
 	self.time = 0
 	self.name = "superslash"
 	self.collider = BoxCollider(28, 32)

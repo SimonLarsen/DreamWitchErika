@@ -29,7 +29,7 @@ function SandBlock:draw()
 end
 
 function SandBlock:onCollide(collider)
-	if collider.name == "slash" then
+	if collider.name == "superslash" then
 		self.broken = 0.0001
 	end
 end
