@@ -1,4 +1,5 @@
 local Room = require("Room")
+local Entity = require("Entity")
 
 local WorldData = class("WorldData")
 
@@ -24,7 +25,7 @@ function WorldData:initialize()
 		elseif v.name == "OBJ" then
 			for j, o in ipairs(v.objects) do
 				if o.type == "room" then
-					local r = Room(o.x, o.y, o.width, o.height, o.name)
+					local r = Room(o.x, o.y, o.width, o.height, Entity.static:getId())
 					table.insert(self._rooms, r)
 
 				elseif o.type == "door" then

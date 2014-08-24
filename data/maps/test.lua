@@ -192,7 +192,7 @@ return {
           properties = {}
         },
         {
-          name = "",
+          name = "tl",
           type = "door",
           shape = "rectangle",
           x = 420,
@@ -203,7 +203,7 @@ return {
           properties = {}
         },
         {
-          name = "",
+          name = "bl",
           type = "door",
           shape = "rectangle",
           x = 420,
@@ -214,7 +214,7 @@ return {
           properties = {}
         },
         {
-          name = "",
+          name = "br",
           type = "door",
           shape = "rectangle",
           x = 740,
@@ -225,7 +225,7 @@ return {
           properties = {}
         },
         {
-          name = "",
+          name = "tr",
           type = "door",
           shape = "rectangle",
           x = 740,
@@ -239,8 +239,8 @@ return {
           name = "start",
           type = "spawn",
           shape = "rectangle",
-          x = 40,
-          y = 100,
+          x = 380,
+          y = 140,
           width = 20,
           height = 40,
           visible = true,
@@ -265,6 +265,28 @@ return {
           y = 160,
           width = 20,
           height = 20,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "room",
+          shape = "rectangle",
+          x = 60,
+          y = 360,
+          width = 380,
+          height = 180,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "room",
+          shape = "rectangle",
+          x = 760,
+          y = 340,
+          width = 360,
+          height = 200,
           visible = true,
           properties = {}
         }
