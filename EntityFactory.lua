@@ -3,7 +3,8 @@ local EntityFactory = class("EntityFactory")
 local mapping = {
 	slime = require("Slime"),
 	sandblock = require("SandBlock"),
-	spike = require("Spike")
+	spike = require("Spike"),
+	pickup_djump = require("DoubleJumpPickup"),
 }
 
 function EntityFactory.static:create(type, ...)

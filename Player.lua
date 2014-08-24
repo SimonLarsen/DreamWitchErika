@@ -8,12 +8,18 @@ local CollisionHandler = require("CollisionHandler")
 local Player = class("Player", Entity)
 
 Player.static.MOVE_SPEED = 100
-Player.static.COOLDOWN = 0.5
 Player.static.GRAVITY = 600
 Player.static.JUMP_POWER = 230
 Player.static.MAX_SPEED = 200
+
 Player.static.DASH_SPEED = 600
 Player.static.DASH_TIME = 0.07
+
+Player.static.COOLDOWN = 0.5
+Player.static.BLINK_TIME = 1.5
+Player.static.STUNNED_TIME = 0.4
+Player.static.KNOCKBACK_X = 50
+Player.static.KNOCKBACK_Y = -100
 
 function Player:initialize()
 	self.x, self.y, self.z = 0, 0, 0
@@ -26,6 +32,8 @@ function Player:initialize()
 	self.djumped = true
 	self.cooldown = 0
 	self.dashing = 0
+	self.blink = 0
+	self.stunned = 0
 
 	self.collider = BoxCollider(8, 20)
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
@@ -39,33 +47,35 @@ function Player:update(dt)
 	local state = 0
 
 	-- Move
-	self.xspeed = 0
-	if Input.static:isDown("a") then
-		self.xspeed = -Player.static.MOVE_SPEED
-		self.dir = -1
-		state = 1
-	end
-	if Input.static:isDown("d") then
-		self.xspeed = Player.static.MOVE_SPEED
-		self.dir = 1
-		state = 1
-	end
-
-	-- Jump
-	if (Input.static:wasPressed("w") or Input.static:wasPressed("k"))
-	and (self.grounded == true or self.djumped == false) then
-		if self.grounded == false then
-			self.djumped = true
+	if self.dashing <= 0 and self.stunned <= 0 then
+		self.xspeed = 0
+		if Input.static:isDown("a") then
+			self.xspeed = -Player.static.MOVE_SPEED
+			self.dir = -1
+			state = 1
 		end
-		self.yspeed = -Player.static.JUMP_POWER
-		self.animator:setProperty("jump", true)
-	end
+		if Input.static:isDown("d") then
+			self.xspeed = Player.static.MOVE_SPEED
+			self.dir = 1
+			state = 1
+		end
 
-	-- Dash
-	if Input.static:wasPressed("l")
-	and self.dashing <= 0 and self.cooldown <= 0 then
-		self.dashing = Player.static.DASH_TIME
-		self.animator:setProperty("dash", true)
+		-- Jump
+		if (Input.static:wasPressed("w") or Input.static:wasPressed("k"))
+		and (self.grounded == true or self.djumped == false) then
+			if self.grounded == false then
+				self.djumped = true
+			end
+			self.yspeed = -Player.static.JUMP_POWER
+			self.animator:setProperty("jump", true)
+		end
+
+		-- Dash
+		if Input.static:wasPressed("l")
+		and self.dashing <= 0 and self.cooldown <= 0 then
+			self.dashing = Player.static.DASH_TIME
+			self.animator:setProperty("dash", true)
+		end
 	end
 
 	-- Update physics / collisions
@@ -108,6 +118,12 @@ function Player:update(dt)
 		end
 	end
 
+	if self.stunned > 0 then
+		self.stunned = self.stunned - dt
+	end
+	if self.blink > 0 then
+		self.blink = self.blink - dt
+	end
 	if self.cooldown > 0 then
 		self.cooldown = self.cooldown - dt
 	end
@@ -126,6 +142,11 @@ function Player:update(dt)
 	if self.grounded == false then
 		state = 2
 	end
+
+	if self.stunned > 0 then
+		state = 3
+	end
+
 	self.animator:setProperty("state", state)
 	self.animator:update(dt)
 
@@ -137,10 +158,22 @@ end
 
 function Player:draw()
 	self.animator:draw(self.x, self.y, 0, self.dir, 1)
+	if self.blink > 0 and math.cos(self.blink*50) < 0 then
+		love.graphics.setBlendMode("additive")
+		self.animator:draw(self.x, self.y, 0, self.dir, 1)
+		love.graphics.setBlendMode("alpha")
+	end
 end
 
 function Player:onCollide(collider)
-	if collider.name == "sandblock" then
+	if collider.name == "slime" then
+		if self.dashing <= 0 and self.blink <= 0 then
+			self.stunned = Player.static.STUNNED_TIME
+			self.blink = Player.static.BLINK_TIME
+			self.xspeed = math.sign(self.x-collider.x) * Player.static.KNOCKBACK_X
+			self.yspeed = Player.static.KNOCKBACK_Y
+		end
+	elseif collider.name == "sandblock" then
 		if CollisionHandler.static:checkBoxBox(self, collider) then
 			self.x = self.oldx
 		end

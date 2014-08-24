@@ -39,6 +39,7 @@ function WorldData:initialize()
 				elseif o.type == "spawn" then
 					local s = {x = o.x+o.width/2, y = o.y+o.height/2, id = o.name}
 					table.insert(self._spawns, s)
+
 				else
 					table.insert(self._entities, o)
 				end

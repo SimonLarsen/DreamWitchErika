@@ -16,7 +16,7 @@ function Slime:initialize(x, y, dir)
 	self.grounded = true
 	self.cooldown = 0
 	self.health = 1
-	self.collider = BoxCollider(16, 20)
+	self.collider = BoxCollider(16, 14, 0, 6)
 	self.blink = 0
 
 	self.xspeed, self.yspeed = 0, 0
@@ -42,7 +42,7 @@ function Slime:update(dt)
 
 	if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
 
-	if math.abs(self.y-self.player.y) < 20 and math.abs(self.x-self.player.x) < 140
+	if math.abs(self.y-self.player.y) < 20 and math.abs(self.x-self.player.x) < 100
 	and self.grounded and self.cooldown <= 0 then
 		self.dir = math.sign(self.player.x - self.x)
 		self.xspeed = Slime.static.JUMP_POWER_X*self.dir
@@ -81,14 +81,22 @@ function Slime:draw()
 end
 
 function Slime:onCollide(collider)
-	if collider.name == "slash" and self.blink <= 0 then
+	if self.blink > 0 then return end
+	if collider.name == "slash" then
 		self.cooldown = 1
 		self.blink = 0.5
 		self.health = self.health - 0.5
 		if self.health <= 0 then
 			self.animator:setProperty("die", true)
+			self.name = ""
 		end
 	elseif collider.name == "superslash" then
+		self.cooldown = 1
+		self.health = 0
+		self.blink = 0.5
+		self.name = ""
+		self.animator:setProperty("die", true)
+	elseif collider.name == "spike" then
 		self.cooldown = 1
 		self.blink = 0.5
 		self.health = 0
