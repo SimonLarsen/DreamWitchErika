@@ -16,15 +16,18 @@ function love.load()
 	love.window.setMode(WIDTH*SCALE, HEIGHT*SCALE)
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setBackgroundColor(123, 213, 220)
+	love.graphics.setLineWidth(1)
+	love.graphics.setLineStyle("rough")
 
 	gamestate.registerEvents()
-	--gamestate.switch(require("GameScene")())
-	gamestate.switch(require("MeadowScene")())
+	gamestate.switch(require("GameScene")())
+	--gamestate.switch(require("MeadowScene")())
 
 	Preferences.static:load()
-	Preferences.static:set("has_superslash", false)
-	Preferences.static:set("has_djump", false)
+	Preferences.static:set("has_djump", true)
 	Preferences.static:set("has_smash", false)
+	Preferences.static:set("has_dash", false)
+	Preferences.static:set("has_superslash", false)
 	Preferences.static:set("has_wjump", false)
 
 	Camera.static.zoom = SCALE
@@ -38,13 +41,16 @@ function love.draw()
 	Input.static:update()
 	love.graphics.push()
 
-	love.graphics.scale(Camera.static.zoom)
 	love.graphics.translate(-Camera.static.x+WIDTH/2, -Camera.static.y+HEIGHT/2)
 end
 
 function love.gui()
 	love.graphics.pop()
+	love.graphics.push()
+
 	gamestate.current():gui()
+
+	love.graphics.pop()
 end
 
 function love.keypressed(k)
@@ -73,6 +79,8 @@ function love.run()
     if love.timer then love.timer.step() end
 
     local dt = 0
+
+	local canvas = love.graphics.newCanvas(WIDTH, HEIGHT)
 
     -- Main loop time.
     while true do
@@ -106,8 +114,16 @@ function love.run()
         if love.window and love.graphics and love.window.isCreated() then
             love.graphics.clear()
             love.graphics.origin()
+			canvas:clear()
+			love.graphics.setCanvas(canvas)
+
             if love.draw then love.draw() end
 			if love.gui then love.gui() end
+
+			love.graphics.setCanvas()
+			love.graphics.scale(SCALE, SCALE)
+			love.graphics.draw(canvas, 0, 0)
+
             love.graphics.present()
         end
 

@@ -11,6 +11,7 @@ Player.static.MOVE_SPEED = 100
 Player.static.GRAVITY = 600
 Player.static.JUMP_POWER = 230
 Player.static.MAX_SPEED = 200
+Player.static.TIME_SPEED = 0.75/180
 
 Player.static.DASH_SPEED = 600
 Player.static.DASH_TIME = 0.07
@@ -28,7 +29,7 @@ function Player:initialize()
 	self.yspeed = 0
 	self.dir = 1
 	self.name = "player"
-	self.health = 100
+	self.health = 0.75
 	self.frozen = 0
 
 	self.grounded = false
@@ -50,6 +51,18 @@ function Player:update(dt)
 	end
 
 	local state = 0
+	
+	-- Update attributes
+	if self.stunned > 0 then self.stunned = self.stunned - dt end
+	if self.blink > 0 then self.blink = self.blink - dt end
+	if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
+	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
+	if self.frozen > 0 then self.frozen = self.frozen - dt end
+
+	self.health = self.health - Player.static.TIME_SPEED * dt
+	if self.health <= 0 then
+		print("DIED")
+	end
 
 	-- Move
 	if self.dashing <= 0 and self.stunned <= 0 and self.frozen <= 0 then
@@ -84,6 +97,7 @@ function Player:update(dt)
 
 		-- Dash
 		if Input.static:wasPressed("l")
+		and Preferences.static:get("has_dash", false) == true
 		and self.dashing <= 0 and self.cooldown <= 0 and self.dashcooldown <= 0 then
 			self.dashcooldown = Player.static.DASH_COOLDOWN
 			self.dashing = Player.static.DASH_TIME
@@ -135,12 +149,6 @@ function Player:update(dt)
 		end
 	end
 
-	if self.stunned > 0 then self.stunned = self.stunned - dt end
-	if self.blink > 0 then self.blink = self.blink - dt end
-	if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
-	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
-	if self.frozen > 0 then self.frozen = self.frozen - dt end
-
 	if Input.static:wasPressed("j") and self.slash <= 0 and self.cooldown <= 0 then
 		if Preferences.static:get("has_superslash", false) == true then
 			self.animator:setProperty("superswing", true)
@@ -178,6 +186,14 @@ function Player:draw()
 	end
 end
 
+function Player:gui()
+	love.graphics.setColor(56, 74, 92)
+	local astart = 3*math.pi/2
+	local aend = 3*math.pi/2 - self.health*2*math.pi
+	love.graphics.arc("fill", 30, 30, 20, astart, aend, 64)
+	love.graphics.setColor(255, 255, 255)
+end
+
 function Player:takeDamage(damage, collider)
 	self.health = self.health - damage
 	self.stunned = Player.static.STUNNED_TIME
@@ -189,13 +205,13 @@ end
 function Player:onCollide(collider)
 	if self.dashing <= 0 and self.blink <= 0 and self.frozen <= 0 then
 		if collider.name == "slime" then
-			self:takeDamage(0, collider)
+			self:takeDamage(0.15, collider)
 		elseif collider.name == "spike" then
-			self:takeDamage(0, collider)
+			self:takeDamage(0.25, collider)
 		elseif collider.name == "wasp" then
-			self:takeDamage(0, collider)
+			self:takeDamage(0.25, collider)
 		elseif collider.name == "knight" then
-			self:takeDamage(0, collider)
+			self:takeDamage(0.25, collider)
 		end
 	end
 

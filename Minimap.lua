@@ -2,7 +2,7 @@ local Entity = require("Entity")
 
 local Minimap = class("Minimap", Entity)
 
-local scale = 1/4
+local scale = 1/16
 
 function Minimap:initialize()
 	self.x, self.y, self.z = 0, 0, -100
@@ -27,11 +27,11 @@ function Minimap:gui()
 
 	love.graphics.setColor(0, 0, 0, 128)
 	local room = self.world:getRoom()
-	love.graphics.rectangle("fill", room.x*scale, room.y*scale, room.w*scale, room.h*scale)
+	love.graphics.rectangle("fill", 60+room.x*scale, room.y*scale, room.w*scale, room.h*scale)
 
 	love.graphics.setColor(255, 255, 255)
 	for i, room in ipairs(self.worlddata:getRooms()) do
-		love.graphics.rectangle("line", room.x*scale, room.y*scale, room.w*scale, room.h*scale)
+		love.graphics.rectangle("line", 60+room.x*scale, room.y*scale, room.w*scale, room.h*scale)
 	end
 
 	love.graphics.setColor(255,255,255)
