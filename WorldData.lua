@@ -41,6 +41,7 @@ function WorldData:initialize()
 					table.insert(self._spawns, s)
 
 				else
+					o.id = Entity.static:getId()
 					table.insert(self._entities, o)
 				end
 			end

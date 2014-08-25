@@ -250,8 +250,8 @@ function Player:onCollide(collider)
 		end
 	elseif collider.name == "pickup" then
 		self.animator:setProperty("powerupget", true)
-		self.frozen = 7*0.13
 		self.yspeed = 0
+		self.frozen = 7*0.13
 	end
 end
 

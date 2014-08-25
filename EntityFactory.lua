@@ -10,6 +10,9 @@ local mapping = {
 
 	pickup_djump = require("DoubleJumpPickup"),
 	pickup_smash = require("SmashPickup"),
+	pickup_dash = require("DashPickup"),
+	pickup_superslash = require("SuperSlash"),
+	pickup_wwjump = require("WallJumpPickup"),
 
 	statue = require("Statue"),
 }

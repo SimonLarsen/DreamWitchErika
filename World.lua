@@ -116,6 +116,8 @@ function World:loadRoom(id)
 		local e = EntityFactory.static:create(v.type, v.x+TILEW/2, v.y+TILEW/2, v.prop)
 		self.scene:addEntity(e)
 	end
+
+	Preferences.static:set("room".. self._room.id, true)
 end
 
 function World:buildSpriteBatchs(room)
