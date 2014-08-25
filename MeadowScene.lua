@@ -12,9 +12,9 @@ function MeadowScene:enter()
 
 	self:addEntity(NPC(95, 130, 1, 20, 20))
 	self:addEntity(NPC(135, 130, 2, 20, 20))
-	self:addEntity(NPC(175, 129.5, 3, 13, 21))
-	self:addEntity(NPC(215, 129.5, 4, 13, 21))
-	self:addEntity(NPC(255, 128.5, 5, 22, 23))
+	self:addEntity(NPC(175, 128.5, 3, 13, 21))
+	self:addEntity(NPC(215, 130, 4, 20, 20))
+	self:addEntity(NPC(255, 127.5, 5, 22, 23))
 end
 
 return MeadowScene
