@@ -118,7 +118,7 @@ function World:loadRoom(id)
 		self.scene:addEntity(e)
 	end
 
-	Preferences.static:set("room".. self._room.id, true)
+	Preferences.static:set(self._room.id, true)
 end
 
 function World:buildSpriteBatchs(room)

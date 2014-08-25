@@ -42,6 +42,7 @@ function WorldData:initialize()
 
 				else
 					o.id = Entity.static:getId()
+					o.properties.id = o.id
 					table.insert(self._entities, o)
 				end
 			end

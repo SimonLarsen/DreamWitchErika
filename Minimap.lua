@@ -31,7 +31,7 @@ function Minimap:gui()
 
 	love.graphics.setColor(255, 255, 255)
 	for i, room in ipairs(self.worlddata:getRooms()) do
-		if Preferences.static:get("room".. room.id, false) then
+		if Preferences.static:get(room.id, false) then
 			love.graphics.rectangle("line", 60+room.x*scale, room.y*scale, room.w*scale, room.h*scale)
 		end
 	end

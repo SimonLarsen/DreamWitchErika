@@ -15,6 +15,7 @@ local mapping = {
 	pickup_wwjump = require("WallJumpPickup"),
 
 	statue = require("Statue"),
+	hourglass = require("hourglass"),
 }
 
 function EntityFactory.static:create(type, ...)

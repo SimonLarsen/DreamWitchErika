@@ -29,7 +29,8 @@ function Player:initialize()
 	self.yspeed = 0
 	self.dir = 1
 	self.name = "player"
-	self.health = 0.75
+	self.maxhealth = 0.75 + Preferences.static:get("hourglasses", 0) * 0.05
+	self.health = self.maxhealth
 	self.lasthealth = self.health
 	self.lasthealthspeed = 1000
 	self.frozen = 0
@@ -63,7 +64,8 @@ function Player:update(dt)
 	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
 	if self.frozen > 0 then self.frozen = self.frozen - dt end
 
-	self.health = math.max(0, self.health - Player.static.TIME_SPEED * dt)
+	self.maxhealth = 0.75 + Preferences.static:get("hourglasses", 0) * 0.05
+	self.health = math.min(self.maxhealth, math.max(0, self.health - Player.static.TIME_SPEED * dt))
 	self.lasthealthspeed = self.lasthealthspeed + dt/5
 	local healthdiff = self.lasthealth - self.health
 	if self.health > self.lasthealth then
@@ -204,7 +206,6 @@ function Player:update(dt)
 		self.dead = true
 		self.animator:setProperty("die", true)
 		Sound.play("warp_charge")
-		print("gylp")
 		Timer.add(1, function()
 			self.world:leaveWorld()
 		end)
@@ -230,11 +231,15 @@ end
 
 function Player:gui()
 	local start = 3*math.pi/2
+	local mend = 3*math.pi/2 - self.maxhealth*2*math.pi
 	local lend = 3*math.pi/2 - self.lasthealth*2*math.pi
 	local hend = 3*math.pi/2 - self.health*2*math.pi
 
 	love.graphics.setColor(255, 255, 255)
 	love.graphics.circle("fill", 30, 30, 21, 64)
+
+	love.graphics.setColor(150, 166, 183)
+	love.graphics.arc("fill", 30, 30, 20, start, mend, 64)
 
 	love.graphics.setColor(220, 53, 69)
 	love.graphics.arc("fill", 30, 30, 20, start, lend, 64)
