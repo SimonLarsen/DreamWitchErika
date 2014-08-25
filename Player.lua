@@ -30,6 +30,8 @@ function Player:initialize()
 	self.dir = 1
 	self.name = "player"
 	self.health = 0.75
+	self.lasthealth = self.health
+	self.lasthealthspeed = 1000
 	self.frozen = 0
 
 	self.grounded = false
@@ -60,6 +62,9 @@ function Player:update(dt)
 	if self.frozen > 0 then self.frozen = self.frozen - dt end
 
 	self.health = self.health - Player.static.TIME_SPEED * dt
+	self.lasthealthspeed = self.lasthealthspeed + dt/5
+	local healthdiff = self.lasthealth - self.health
+	self.lasthealth = self.lasthealth - math.min(healthdiff, healthdiff*self.lasthealthspeed^2)
 	if self.health <= 0 then
 		print("DIED")
 	end
@@ -174,7 +179,7 @@ function Player:update(dt)
 	local room = self.world:getRoom()
 	local camx = math.min(room.w-WIDTH/2, math.max(WIDTH/2, self.x))
 	local camy = math.min(room.h-HEIGHT/2, math.max(HEIGHT/2, self.y))
-	Camera.static:setPosition(camx, camy)
+	Camera.static:setPosition(math.round(camx), math.round(camy))
 end
 
 function Player:draw()
@@ -187,14 +192,25 @@ function Player:draw()
 end
 
 function Player:gui()
+	local start = 3*math.pi/2
+	local lend = 3*math.pi/2 - self.lasthealth*2*math.pi
+	local hend = 3*math.pi/2 - self.health*2*math.pi
+
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.circle("fill", 30, 30, 21, 64)
+
+	love.graphics.setColor(220, 53, 69)
+	love.graphics.arc("fill", 30, 30, 20, start, lend, 64)
+
 	love.graphics.setColor(56, 74, 92)
-	local astart = 3*math.pi/2
-	local aend = 3*math.pi/2 - self.health*2*math.pi
-	love.graphics.arc("fill", 30, 30, 20, astart, aend, 64)
+	love.graphics.arc("fill", 30, 30, 20, start, hend, 64)
+
 	love.graphics.setColor(255, 255, 255)
 end
 
 function Player:takeDamage(damage, collider)
+	self.lasthealth = self.health
+	self.lasthealthspeed = 0.00
 	self.health = self.health - damage
 	self.stunned = Player.static.STUNNED_TIME
 	self.blink = Player.static.BLINK_TIME
