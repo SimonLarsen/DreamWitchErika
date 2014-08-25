@@ -2,6 +2,7 @@ local Entity = require("Entity")
 local Animator = require("Animator")
 local Player = require("Player")
 local BoxCollider = require("BoxCollider")
+local Fade = require("Fade")
 
 local MeadowPlayer = class("MeadowPlayer", Entity)
 
@@ -14,10 +15,16 @@ function MeadowPlayer:initialize(x, y)
 	self.collider = BoxCollider(16, 20)
 
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
+
+	Sound.music("title")
 end
 
 function MeadowPlayer:update(dt)
 	local state = 0
+
+	if self.prompt == nil then
+		self.prompt = self.scene:find("meadowprompt")
+	end
 
 	self.xspeed = 0
 	if Input.static:isDown("a") then
@@ -66,8 +73,14 @@ end
 
 function MeadowPlayer:onCollide(collider)
 	if collider.name == "npc" then
+		self.prompt.x = collider.x-5
+		self.prompt.alpha = 255
 		if Input.static:wasPressed("j") then
-			gamestate.switch(require("GameScene")(collider:getSpawn()))
+			Sound.play("door")
+			self.scene:addEntity(Fade(Fade.static.TO_BLACK, 1))
+			Timer.add(0.99, function()
+				gamestate.switch(require("GameScene")(collider:getSpawn()))
+			end)
 		end
 	end
 end

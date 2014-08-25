@@ -33,6 +33,7 @@ function Statue:onCollide(collider)
 		Timer.add(2.1, function()
 			self.scene:find("world"):leaveWorld()
 		end)
+		Sound.play("statueexplode")
 	end
 end
 
