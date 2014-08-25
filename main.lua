@@ -20,15 +20,17 @@ function love.load()
 	love.graphics.setLineStyle("rough")
 
 	gamestate.registerEvents()
-	--gamestate.switch(require("GameScene")())
-	gamestate.switch(require("MeadowScene")())
+	gamestate.switch(require("GameScene")())
+	--gamestate.switch(require("MeadowScene")())
 
 	Preferences.static:load()
 	Preferences.static:set("has_djump", true)
 	Preferences.static:set("has_smash", false)
 	Preferences.static:set("has_dash", false)
-	Preferences.static:set("has_superslash", false)
+	Preferences.static:set("has_superslash", true)
 	Preferences.static:set("has_wjump", false)
+
+	Preferences.static:set("clear1", false)
 
 	Camera.static.zoom = SCALE
 end
