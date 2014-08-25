@@ -12,6 +12,7 @@ return {
 		["dash"] = { image = "dash.png", fw = 20, fh = 20, delay = 0.1 },
 		["stunned"] = { image = "stunned.png", fw = 20, fh = 20, delay = 0.1 },
 		["powerupget"] = { image = "powerupget.png", fw = 20, fh = 20, delay = 0.13 },
+		["warp"] = { image = "warp.png", fw = 20, fh = 20, delay = 0.12, loop = false },
 	},
 
 	properties = {
@@ -19,6 +20,7 @@ return {
 		-- 1: run
 		-- 2: fly
 		-- 3: stunned
+		-- 4: warp
 		["state"] = { value = 0 },
 		["swing"] = { value = false, isTrigger = true },
 		["superswing"] = { value = false, isTrigger = true },
@@ -99,6 +101,14 @@ return {
 		{
 			from = "powerupget", to = "fly",
 			property = "_finished", value = true
+		},
+		{
+			from = "idle", to = "warp",
+			property = "state", value = 4
+		},
+		{
+			from = "warp", to = "idle",
+			property = "state", value = 0
 		},
 	}
 }

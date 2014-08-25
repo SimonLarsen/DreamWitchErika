@@ -33,6 +33,7 @@ function Player:initialize()
 	self.lasthealth = self.health
 	self.lasthealthspeed = 1000
 	self.frozen = 0
+	self.warping = 0
 
 	self.grounded = false
 	self.slash = 0
@@ -108,6 +109,16 @@ function Player:update(dt)
 			self.dashing = Player.static.DASH_TIME
 			self.animator:setProperty("dash", true)
 		end
+
+		if Input.static:isDown("i") and self.xspeed == 0 and self.grounded then
+			self.warping = self.warping + dt
+			if self.warping >= 1.1 then
+				self.frozen = 100
+				self.world:leaveWorld()
+			end
+		else
+			self.warping = 0
+		end
 	end
 
 	-- Update physics / collisions
@@ -168,9 +179,11 @@ function Player:update(dt)
 	if self.grounded == false then
 		state = 2
 	end
-
 	if self.stunned > 0 then
 		state = 3
+	end
+	if self.warping > 0 then
+		state = 4
 	end
 
 	self.animator:setProperty("state", state)

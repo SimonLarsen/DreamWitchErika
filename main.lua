@@ -20,8 +20,8 @@ function love.load()
 	love.graphics.setLineStyle("rough")
 
 	gamestate.registerEvents()
-	gamestate.switch(require("GameScene")())
-	--gamestate.switch(require("MeadowScene")())
+	--gamestate.switch(require("GameScene")())
+	gamestate.switch(require("MeadowScene")())
 
 	Preferences.static:load()
 	Preferences.static:set("has_djump", true)
