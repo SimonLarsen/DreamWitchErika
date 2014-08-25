@@ -98,7 +98,7 @@ function Slime:onCollide(collider)
 	end
 	if self.health <= 0 then
 		self.animator:setProperty("die", true)
-		self.name = ""
+		self.collider = nil
 	end
 end
 

@@ -11,6 +11,7 @@ return {
 		["land"] = { image = "land.png", fw = 20, fh = 20, delay = 0.08 },
 		["dash"] = { image = "dash.png", fw = 20, fh = 20, delay = 0.1 },
 		["stunned"] = { image = "stunned.png", fw = 20, fh = 20, delay = 0.1 },
+		["powerupget"] = { image = "powerupget.png", fw = 20, fh = 20, delay = 0.13 },
 	},
 
 	properties = {
@@ -23,6 +24,7 @@ return {
 		["superswing"] = { value = false, isTrigger = true },
 		["jump"] = { value = false, isTrigger = true },
 		["dash"] = { value = false, isTrigger = true },
+		["powerupget"] = { value = false, isTrigger = true },
 	},
 
 	transitions = {
@@ -88,6 +90,14 @@ return {
 		},
 		{
 			from = "stunned", to = "fly",
+			property = "_finished", value = true
+		},
+		{
+			from = "any", to = "powerupget",
+			property = "powerupget", value = true
+		},
+		{
+			from = "powerupget", to = "fly",
 			property = "_finished", value = true
 		},
 	}

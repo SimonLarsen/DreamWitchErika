@@ -23,7 +23,7 @@ function love.load()
 
 	Preferences.static:load()
 	Preferences.static:set("has_superslash", false)
-	Preferences.static:set("has_djump", true)
+	Preferences.static:set("has_djump", false)
 	Preferences.static:set("has_smash", false)
 	Preferences.static:set("has_wjump", false)
 

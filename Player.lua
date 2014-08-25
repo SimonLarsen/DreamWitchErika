@@ -29,7 +29,7 @@ function Player:initialize()
 	self.dir = 1
 	self.name = "player"
 	self.health = 100
-	self.frozen = false
+	self.frozen = 0
 
 	self.grounded = false
 	self.slash = 0
@@ -45,8 +45,6 @@ function Player:initialize()
 end
 
 function Player:update(dt)
-	if self.frozen == true then return end
-
 	if self.world == nil then
 		self.world = self.scene:find("world")
 	end
@@ -54,7 +52,7 @@ function Player:update(dt)
 	local state = 0
 
 	-- Move
-	if self.dashing <= 0 and self.stunned <= 0 then
+	if self.dashing <= 0 and self.stunned <= 0 and self.frozen <= 0 then
 		self.xspeed = 0
 		if Input.static:isDown("a") then
 			self.xspeed = -Player.static.MOVE_SPEED
@@ -94,31 +92,33 @@ function Player:update(dt)
 	end
 
 	-- Update physics / collisions
-	self.yspeed = self.yspeed + Player.static.GRAVITY*dt
-	self.yspeed = math.min(self.yspeed, Player.static.MAX_SPEED)
-	self.oldy = self.y
-	self.y = self.y + self.yspeed * dt
-	self.grounded = false
-	if self.world:collide(self.x-4, self.y-7, 8, 17) then
-		if self.yspeed > 0 then
-			self.grounded = true
-			if Preferences.static:get("has_djump", false) == true then
-				self.djumped = false
+	if self.frozen <= 0 then
+		self.yspeed = self.yspeed + Player.static.GRAVITY*dt
+		self.yspeed = math.min(self.yspeed, Player.static.MAX_SPEED)
+		self.oldy = self.y
+		self.y = self.y + self.yspeed * dt
+		self.grounded = false
+		if self.world:collide(self.x-4, self.y-7, 8, 17) then
+			if self.yspeed > 0 then
+				self.grounded = true
+				if Preferences.static:get("has_djump", false) == true then
+					self.djumped = false
+				end
 			end
+			self.y = self.oldy
+			self.yspeed = self.yspeed/2
 		end
-		self.y = self.oldy
-		self.yspeed = self.yspeed/2
-	end
 
-	if self.dashing > 0 then
-		self.dashing = self.dashing - dt
-		self.yspeed = 0
-		self.xspeed = self.dir * Player.static.DASH_SPEED
-	end
-	self.oldx = self.x
-	self.x = math.min(self.world:getRoom().w-5, math.max(5, self.x + self.xspeed * dt))
-	if self.world:collide(self.x-4, self.y-7, 8, 17) then
-		self.x = self.oldx
+		if self.dashing > 0 then
+			self.dashing = self.dashing - dt
+			self.yspeed = 0
+			self.xspeed = self.dir * Player.static.DASH_SPEED
+		end
+		self.oldx = self.x
+		self.x = math.min(self.world:getRoom().w-5, math.max(5, self.x + self.xspeed * dt))
+		if self.world:collide(self.x-4, self.y-7, 8, 17) then
+			self.x = self.oldx
+		end
 	end
 
 	-- Slash
@@ -139,6 +139,7 @@ function Player:update(dt)
 	if self.blink > 0 then self.blink = self.blink - dt end
 	if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
 	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
+	if self.frozen > 0 then self.frozen = self.frozen - dt end
 
 	if Input.static:wasPressed("j") and self.slash <= 0 and self.cooldown <= 0 then
 		if Preferences.static:get("has_superslash", false) == true then
@@ -186,7 +187,7 @@ function Player:takeDamage(damage, collider)
 end
 
 function Player:onCollide(collider)
-	if self.dashing <= 0 and self.blink <= 0 and self.frozen == false then
+	if self.dashing <= 0 and self.blink <= 0 and self.frozen <= 0 then
 		if collider.name == "slime" then
 			self:takeDamage(0, collider)
 		elseif collider.name == "spike" then
@@ -202,6 +203,10 @@ function Player:onCollide(collider)
 		if CollisionHandler.static:checkBoxBox(self, collider) then
 			self.x = self.oldx
 		end
+	elseif collider.name == "pickup" then
+		self.animator:setProperty("powerupget", true)
+		self.frozen = 7*0.13
+		self.yspeed = 0
 	end
 end
 

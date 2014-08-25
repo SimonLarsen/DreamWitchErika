@@ -63,7 +63,7 @@ function Wasp:onCollide(collider)
 
 	if self.health <= 0 then
 		self.animator:setProperty("die", true)
-		self.name = ""
+		self.collider = nil
 	end
 end
 

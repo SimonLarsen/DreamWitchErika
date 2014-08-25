@@ -38,13 +38,12 @@ function World:goToRoom(id, door)
 	if self.fading then return end
 	self.scene:addEntity(Fade(Fade.static.TO_BLACK, 1))
 	local player = self.scene:find("player")
-	player.frozen = true
+	player.frozen = 1
 	self.fading = true
 	Timer.add(0.99, function()
 		self:walkInRoom(id, door)
 		self.scene:addEntity(Fade(Fade.static.FROM_BLACK, 1))
 		self.fading = false
-		player.frozen = false
 	end)
 end
 
