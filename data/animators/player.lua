@@ -59,7 +59,7 @@ return {
 			property = "dash", value = true
 		},
 		{
-			from = "dash", to = "idle",
+			from = "dash", to = "fly",
 			property = "_finished", value = true
 		},
 		{
@@ -87,7 +87,7 @@ return {
 			property = "state", value = 3
 		},
 		{
-			from = "stunned", to = "idle",
+			from = "stunned", to = "fly",
 			property = "_finished", value = true
 		},
 	}

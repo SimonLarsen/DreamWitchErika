@@ -28,6 +28,8 @@ function Player:initialize()
 	self.yspeed = 0
 	self.dir = 1
 	self.name = "player"
+	self.health = 100
+
 	self.grounded = false
 	self.slash = 0
 	self.djumped = true
@@ -123,18 +125,10 @@ function Player:update(dt)
 		end
 	end
 
-	if self.stunned > 0 then
-		self.stunned = self.stunned - dt
-	end
-	if self.blink > 0 then
-		self.blink = self.blink - dt
-	end
-	if self.cooldown > 0 then
-		self.cooldown = self.cooldown - dt
-	end
-	if self.dashcooldown > 0 then
-		self.dashcooldown = self.dashcooldown - dt
-	end
+	if self.stunned > 0 then self.stunned = self.stunned - dt end
+	if self.blink > 0 then self.blink = self.blink - dt end
+	if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
+	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
 
 	if Input.static:wasPressed("j") and self.slash <= 0 and self.cooldown <= 0 then
 		if Preferences.static:get("has_superslash") == true then
@@ -173,15 +167,26 @@ function Player:draw()
 	end
 end
 
+function Player:takeDamage(damage, collider)
+	self.health = self.health - damage
+	self.stunned = Player.static.STUNNED_TIME
+	self.blink = Player.static.BLINK_TIME
+	self.xspeed = math.sign(self.x-collider.x) * Player.static.KNOCKBACK_X
+	self.yspeed = Player.static.KNOCKBACK_Y
+end
+
 function Player:onCollide(collider)
-	if collider.name == "slime" then
-		if self.dashing <= 0 and self.blink <= 0 then
-			self.stunned = Player.static.STUNNED_TIME
-			self.blink = Player.static.BLINK_TIME
-			self.xspeed = math.sign(self.x-collider.x) * Player.static.KNOCKBACK_X
-			self.yspeed = Player.static.KNOCKBACK_Y
+	if self.dashing <= 0 and self.blink <= 0 then
+		if collider.name == "slime" then
+			self:takeDamage(0, collider)
+		elseif collider.name == "spike" then
+			self:takeDamage(0, collider)
+		elseif collider.name == "wasp" then
+			self:takeDamage(0, collider)
 		end
-	elseif collider.name == "sandblock" then
+	end
+
+	if collider.name == "sandblock" then
 		if CollisionHandler.static:checkBoxBox(self, collider) then
 			self.x = self.oldx
 		end
