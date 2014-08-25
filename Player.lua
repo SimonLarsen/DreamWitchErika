@@ -16,6 +16,7 @@ Player.static.DASH_SPEED = 600
 Player.static.DASH_TIME = 0.07
 
 Player.static.COOLDOWN = 0.5
+Player.static.DASH_COOLDOWN = 0.6
 Player.static.BLINK_TIME = 1.5
 Player.static.STUNNED_TIME = 0.4
 Player.static.KNOCKBACK_X = 50
@@ -31,6 +32,7 @@ function Player:initialize()
 	self.slash = 0
 	self.djumped = true
 	self.cooldown = 0
+	self.dashcooldown = 0
 	self.dashing = 0
 	self.blink = 0
 	self.stunned = 0
@@ -72,7 +74,8 @@ function Player:update(dt)
 
 		-- Dash
 		if Input.static:wasPressed("l")
-		and self.dashing <= 0 and self.cooldown <= 0 then
+		and self.dashing <= 0 and self.cooldown <= 0 and self.dashcooldown <= 0 then
+			self.dashcooldown = Player.static.DASH_COOLDOWN
 			self.dashing = Player.static.DASH_TIME
 			self.animator:setProperty("dash", true)
 		end
@@ -85,9 +88,11 @@ function Player:update(dt)
 	self.y = self.y + self.yspeed * dt
 	self.grounded = false
 	if self.world:collide(self.x-4, self.y-7, 8, 17) then
-		self.grounded = true
-		if Preferences.static:get("has_djump") == true then
-			self.djumped = false
+		if self.yspeed > 0 then
+			self.grounded = true
+			if Preferences.static:get("has_djump") == true then
+				self.djumped = false
+			end
 		end
 		self.y = self.oldy
 		self.yspeed = self.yspeed/2
@@ -126,6 +131,9 @@ function Player:update(dt)
 	end
 	if self.cooldown > 0 then
 		self.cooldown = self.cooldown - dt
+	end
+	if self.dashcooldown > 0 then
+		self.dashcooldown = self.dashcooldown - dt
 	end
 
 	if Input.static:wasPressed("j") and self.slash <= 0 and self.cooldown <= 0 then
