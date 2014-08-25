@@ -1,4 +1,5 @@
 require("mymath")
+require("slam")
 class = require("middleclass.middleclass")
 gamestate = require("hump.gamestate")
 Resources = require("Resources")
@@ -6,6 +7,7 @@ Camera = require("Camera")
 Input = require("Input")
 Timer = require("hump.timer")
 Preferences = require("Preferences")
+Sound = require("Sound")
 
 WIDTH = 320
 HEIGHT = 180
@@ -22,8 +24,8 @@ function love.load()
 	Preferences.static:load()
 
 	gamestate.registerEvents()
-	gamestate.switch(require("GameScene")())
-	--gamestate.switch(require("MeadowScene")())
+	--gamestate.switch(require("GameScene")())
+	gamestate.switch(require("MeadowScene")())
 
 	Preferences.static:set("has_djump", true)
 	Preferences.static:set("has_smash", true)

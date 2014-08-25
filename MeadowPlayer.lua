@@ -35,6 +35,7 @@ function MeadowPlayer:update(dt)
 		if self.grounded == true then
 			self.yspeed = -Player.static.JUMP_POWER
 			self.animator:setProperty("jump", true)
+			Sound.play("jump")
 		end
 	end
 

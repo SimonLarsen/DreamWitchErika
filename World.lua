@@ -94,6 +94,7 @@ function World:leaveWorld()
 
 	self.scene:addEntity(Fade(Fade.static.TO_BLACK, 1))
 	self.fading = true
+	Sound.play("warp_resolve")
 	Timer.add(0.99, function()
 		gamestate.switch(require("MeadowScene")())
 	end)

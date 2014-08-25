@@ -34,6 +34,7 @@ function Player:initialize()
 	self.lasthealthspeed = 1000
 	self.frozen = 0
 	self.warping = 0
+	self.dead = false
 
 	self.grounded = false
 	self.slash = 0
@@ -62,7 +63,7 @@ function Player:update(dt)
 	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
 	if self.frozen > 0 then self.frozen = self.frozen - dt end
 
-	self.health = self.health - Player.static.TIME_SPEED * dt
+	self.health = math.max(0, self.health - Player.static.TIME_SPEED * dt)
 	self.lasthealthspeed = self.lasthealthspeed + dt/5
 	local healthdiff = self.lasthealth - self.health
 	if self.health > self.lasthealth then
@@ -72,7 +73,7 @@ function Player:update(dt)
 	end
 
 	-- Move
-	if self.dashing <= 0 and self.stunned <= 0 and self.frozen <= 0 then
+	if self.dashing <= 0 and self.stunned <= 0 and self.frozen <= 0 and self.health > 0 then
 		self.xspeed = 0
 		if Input.static:isDown("a") then
 			self.xspeed = -Player.static.MOVE_SPEED
@@ -91,11 +92,13 @@ function Player:update(dt)
 				if self.grounded == false then
 					self.djumped = true
 				end
+				Sound.play("jump")
 				self.yspeed = -Player.static.JUMP_POWER
 				self.animator:setProperty("jump", true)
 			elseif Preferences.static:get("has_wjump", false) == true then
 				local boxx = self.x - self.dir*20
 				if self.world:collide(boxx-2, self.y-2, 4, 4) then
+					Sound.play("jump")
 					self.yspeed = -Player.static.JUMP_POWER
 					self.animator:setProperty("jump", true)
 				end
@@ -109,9 +112,13 @@ function Player:update(dt)
 			self.dashcooldown = Player.static.DASH_COOLDOWN
 			self.dashing = Player.static.DASH_TIME
 			self.animator:setProperty("dash", true)
+			Sound.play("dash")
 		end
 
 		if Input.static:isDown("i") and self.xspeed == 0 and self.grounded then
+			if self.warping <= 0 then
+				Sound.play("warp_charge")
+			end
 			self.warping = self.warping + dt
 			if self.warping >= 1.1 then
 				self.frozen = 100
@@ -158,8 +165,10 @@ function Player:update(dt)
 		if self.slash <= 0 then
 			local slash
 			if Preferences.static:get("has_superslash", false) == true then
+				Sound.play("swing")
 				slash = SuperSlash(self.x-self.dir*4, self.y, self.dir, self.xspeed)
 			else
+				Sound.play("swing")
 				slash = Slash(self.x+self.dir*12, self.y, self.dir, self.xspeed)
 			end
 			self.scene:addEntity(slash)
@@ -187,10 +196,15 @@ function Player:update(dt)
 		state = 4
 	end
 
-	if self.health <= 0 and self.frozen <= 0 then
-		self.health = 0
+	if self.health <= 0 and self.dead == false then
+		self.stunned = 0
+		self.frozen = 100
+		self.xspeed = 0
 		state = 5
+		self.dead = true
 		self.animator:setProperty("die", true)
+		Sound.play("warp_charge")
+		print("gylp")
 		Timer.add(1, function()
 			self.world:leaveWorld()
 		end)
@@ -202,7 +216,7 @@ function Player:update(dt)
 	local room = self.world:getRoom()
 	local camx = math.min(room.w-WIDTH/2, math.max(WIDTH/2, self.x))
 	local camy = math.min(room.h-HEIGHT/2, math.max(HEIGHT/2, self.y))
-	Camera.static:setPosition(camx, camy)
+	Camera.static:setPosition(math.round(camx), math.round(camy))
 end
 
 function Player:draw()
@@ -239,6 +253,8 @@ function Player:takeDamage(damage, collider)
 	self.blink = Player.static.BLINK_TIME
 	self.xspeed = math.sign(self.x-collider.x) * Player.static.KNOCKBACK_X
 	self.yspeed = Player.static.KNOCKBACK_Y
+
+	Sound.play("hurt")
 end
 
 function Player:onCollide(collider)
@@ -266,6 +282,7 @@ function Player:onCollide(collider)
 
 	elseif collider.name == "orb" then
 		self.health = self.health + 0.05
+		Sound.play("powerup")
 	end
 end
 

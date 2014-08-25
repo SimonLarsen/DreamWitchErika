@@ -131,13 +131,18 @@ function Knight:onCollide(collider)
 			self.cooldown = Knight.static.COOLDOWN
 		end
 		self.cooldown = 1
-		self.blink = 0.5
+		self.blink = 1
 		self.health = self.health - 0.34
 	elseif collider.name == "superslash" then
-		self.dir = math.sign(collider.x - self.x)
+		if self.dir ~= math.sign(collider.x - self.x) then
+			self.dir = -self.dir
+			self.state = 3
+			self.animator:setProperty("state", 3)
+			self.cooldown = Knight.static.COOLDOWN
+		end
 		self.cooldown = 1
-		self.blink = 0.5
-		self.health = self.health - 0.5
+		self.blink = 1
+		self.health = self.health - 0.6
 	elseif collider.name == "spike" then
 		self.cooldown = 1
 		self.blink = 0.5
@@ -148,6 +153,7 @@ function Knight:onCollide(collider)
 		self.scene:addEntity(Orb(self.x, self.y))
 		self.animator:setProperty("die", true)
 		self.collider = nil
+		Sound.play("die")
 	end
 end
 

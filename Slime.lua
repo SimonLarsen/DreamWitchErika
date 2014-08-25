@@ -103,6 +103,7 @@ function Slime:onCollide(collider)
 		end
 		self.animator:setProperty("die", true)
 		self.collider = nil
+		Sound.play("die")
 	end
 end
 

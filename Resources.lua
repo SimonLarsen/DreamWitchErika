@@ -21,4 +21,14 @@ function Resources.static:getAnimator(path)
 	return self.animators[path]
 end
 
+Resources.static.sounds = {}
+
+function Resources.static:getSound(path)
+	path = "data/sounds/" .. path
+	if self.sounds[path] == nil then
+		self.sounds[path] = love.audio.newSource(path, "static")
+	end
+	return self.sounds[path]
+end
+
 return Resources

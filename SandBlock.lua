@@ -33,6 +33,7 @@ function SandBlock:onCollide(collider)
 		if self.broken == 0 and Preferences.static:get("has_smash") == true then
 			self.broken = 0.0001
 			self.collider = nil
+			Sound.play("smash")
 		end
 	end
 end

@@ -45,6 +45,7 @@ function Door:onCollide(collider)
 		self.open = true
 		self.collider.w = 10
 		self.blink = 0.5
+		Sound.play("door")
 	elseif collider.name == "player" and self.open == true then
 		local world = self.scene:find("world")
 		local player = self.scene:find("player")

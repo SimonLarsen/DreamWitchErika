@@ -11,7 +11,6 @@ function Orb:initialize(x, y, prop)
 	self.collider = BoxCollider(5, 5)
 
 	self.sprite = Resources.static:getImage("orb.png")
-	print("ORB CREATED")
 end
 
 function Orb:draw()

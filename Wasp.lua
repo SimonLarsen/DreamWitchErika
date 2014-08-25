@@ -66,6 +66,7 @@ function Wasp:onCollide(collider)
 		if math.random() < 0.333 then
 			self.scene:addEntity(Orb(self.x, self.y))
 		end
+		Sound.play("die")
 		self.animator:setProperty("die", true)
 		self.collider = nil
 	end
