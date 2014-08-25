@@ -9,6 +9,7 @@ local mapping = {
 	wasp = require("Wasp"),
 
 	pickup_djump = require("DoubleJumpPickup"),
+	pickup_smash = require("SmashPickup"),
 }
 
 function EntityFactory.static:create(type, ...)

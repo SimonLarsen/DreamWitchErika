@@ -2,12 +2,12 @@ local Entity = require("Entity")
 local Animation = require("Animation")
 local BoxCollider = require("BoxCollider")
 
-local DoubleJumpPickup = class("DoubleJumpPickup", Entity)
+local SmashPickup = class("SmashPickup", Entity)
 
-function DoubleJumpPickup:initialize(x, y)
+function SmashPickup:initialize(x, y)
 	self.x, self.y = x, y+10
 	self.z = 2
-	self.taken = Preferences.static:get("has_djump", false)
+	self.taken = Preferences.static:get("has_smash", false)
 	self.collider = BoxCollider(16, 16, 0, -9)
 
 	if self.taken then
@@ -19,20 +19,20 @@ function DoubleJumpPickup:initialize(x, y)
 	end
 end
 
-function DoubleJumpPickup:update(dt)
+function SmashPickup:update(dt)
 	self.anim:update(dt)
 end
 
-function DoubleJumpPickup:draw()
+function SmashPickup:draw()
 	self.anim:draw(self.x, self.y, 0, 1, 1, 20, 20)
 end
 
-function DoubleJumpPickup:onCollide(collider)
+function SmashPickup:onCollide(collider)
 	if self.taken == false and collider.name == "player" then
-		Preferences.static:set("has_djump", true)
+		Preferences.static:set("has_smash", true)
 		self.anim._image = Resources.static:getImage("pickup_taken.png")
 		self.taken = true
 	end
 end
 
-return DoubleJumpPickup
+return SmashPickup

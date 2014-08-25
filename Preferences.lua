@@ -25,8 +25,13 @@ function Preferences.static:set(key, value)
 	self:save()
 end
 
-function Preferences.static:get(key)
-	return self.data[key]
+function Preferences.static:get(key, default)
+	local val = self.data[key]
+	if val ~= nil then
+		return val
+	else
+		return default
+	end
 end
 
 return Preferences

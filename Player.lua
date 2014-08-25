@@ -65,13 +65,20 @@ function Player:update(dt)
 		end
 
 		-- Jump
-		if (Input.static:wasPressed("w") or Input.static:wasPressed("k"))
-		and (self.grounded == true or self.djumped == false) then
-			if self.grounded == false then
-				self.djumped = true
+		if Input.static:wasPressed("w") or Input.static:wasPressed("k") then
+			if self.grounded == true or self.djumped == false then
+				if self.grounded == false then
+					self.djumped = true
+				end
+				self.yspeed = -Player.static.JUMP_POWER
+				self.animator:setProperty("jump", true)
+			elseif Preferences.static:get("has_wjump", false) == true then
+				local boxx = self.x - self.dir*20
+				if self.world:collide(boxx-2, self.y-2, 4, 4) then
+					self.yspeed = -Player.static.JUMP_POWER
+					self.animator:setProperty("jump", true)
+				end
 			end
-			self.yspeed = -Player.static.JUMP_POWER
-			self.animator:setProperty("jump", true)
 		end
 
 		-- Dash
@@ -92,7 +99,7 @@ function Player:update(dt)
 	if self.world:collide(self.x-4, self.y-7, 8, 17) then
 		if self.yspeed > 0 then
 			self.grounded = true
-			if Preferences.static:get("has_djump") == true then
+			if Preferences.static:get("has_djump", false) == true then
 				self.djumped = false
 			end
 		end
@@ -116,7 +123,7 @@ function Player:update(dt)
 		self.slash = self.slash - dt
 		if self.slash <= 0 then
 			local slash
-			if Preferences.static:get("has_superslash") == true then
+			if Preferences.static:get("has_superslash", false) == true then
 				slash = SuperSlash(self.x-self.dir*4, self.y, self.dir, self.xspeed)
 			else
 				slash = Slash(self.x+self.dir*12, self.y, self.dir, self.xspeed)
@@ -131,7 +138,7 @@ function Player:update(dt)
 	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
 
 	if Input.static:wasPressed("j") and self.slash <= 0 and self.cooldown <= 0 then
-		if Preferences.static:get("has_superslash") == true then
+		if Preferences.static:get("has_superslash", false) == true then
 			self.animator:setProperty("superswing", true)
 			self.slash = 0.1
 		else

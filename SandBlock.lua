@@ -32,6 +32,7 @@ function SandBlock:onCollide(collider)
 	if collider.name == "slash" or collider.name == "superslash" then
 		if self.broken == 0 and Preferences.static:get("has_smash") == true then
 			self.broken = 0.0001
+			self.name = ""
 		end
 	end
 end

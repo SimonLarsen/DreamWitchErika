@@ -66,7 +66,7 @@ end
 
 function World:walkInRoom(id, door)
 	for i,v in ipairs(self.scene:getEntities()) do
-		if v.name ~= "player" and v.name ~= "world" then
+		if v.name ~= "player" and v.name ~= "world" and v.name ~= "minimap" then
 			v:kill()
 		end
 	end
@@ -174,6 +174,10 @@ end
 
 function World:getRoom()
 	return self._room
+end
+
+function World:getWorldData()
+	return self._worlddata
 end
 
 return World
