@@ -65,8 +65,13 @@ function Player:update(dt)
 	self.health = self.health - Player.static.TIME_SPEED * dt
 	self.lasthealthspeed = self.lasthealthspeed + dt/5
 	local healthdiff = self.lasthealth - self.health
-	self.lasthealth = self.lasthealth - math.min(healthdiff, healthdiff*self.lasthealthspeed^2)
+	if self.health > self.lasthealth then
+		self.lasthealth = self.health
+	else
+		self.lasthealth = self.lasthealth - math.min(healthdiff, healthdiff*self.lasthealthspeed^2)
+	end
 	if self.health <= 0 then
+		self.health = 0
 		print("DIED")
 	end
 
@@ -192,7 +197,7 @@ function Player:update(dt)
 	local room = self.world:getRoom()
 	local camx = math.min(room.w-WIDTH/2, math.max(WIDTH/2, self.x))
 	local camy = math.min(room.h-HEIGHT/2, math.max(HEIGHT/2, self.y))
-	Camera.static:setPosition(math.round(camx), math.round(camy))
+	Camera.static:setPosition(camx, camy)
 end
 
 function Player:draw()

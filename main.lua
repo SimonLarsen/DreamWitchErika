@@ -19,16 +19,19 @@ function love.load()
 	love.graphics.setLineWidth(1)
 	love.graphics.setLineStyle("rough")
 
+	Preferences.static:load()
+
 	gamestate.registerEvents()
 	gamestate.switch(require("GameScene")())
 	--gamestate.switch(require("MeadowScene")())
 
-	Preferences.static:load()
+	--[[
 	Preferences.static:set("has_djump", false)
 	Preferences.static:set("has_smash", false)
 	Preferences.static:set("has_dash", false)
 	Preferences.static:set("has_superslash", false)
 	Preferences.static:set("has_wjump", false)
+	]]
 
 	Camera.static.zoom = SCALE
 end

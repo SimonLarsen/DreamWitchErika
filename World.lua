@@ -1,26 +1,26 @@
-	local Entity = require("Entity")
-	local BBox = require("BBox")
-	local WorldData = require("WorldData")
-	local Door = require("Door")
-	local BlackDoor = require("BlackDoor")
-	local Slime = require("slime")
-	local SandBlock = require("SandBlock")
-	local EntityFactory = require("EntityFactory")
-	local Fade = require("Fade")
+local Entity = require("Entity")
+local BBox = require("BBox")
+local WorldData = require("WorldData")
+local Door = require("Door")
+local BlackDoor = require("BlackDoor")
+local Slime = require("Slime")
+local SandBlock = require("SandBlock")
+local EntityFactory = require("EntityFactory")
+local Fade = require("Fade")
 
-	local World = class("World", Entity)
+local World = class("World", Entity)
 
-	function World:initialize(spawn)
-		self.x, self.y, self.z = 0, 0, 100
-		self.name = "world"
-		self._room = nil
-		self.fading = false
+function World:initialize(spawn)
+	self.x, self.y, self.z = 0, 0, 100
+	self.name = "world"
+	self._room = nil
+	self.fading = false
 
-		self._tileset = Resources.static:getImage("tiles.png")
-		local imgw = self._tileset:getWidth()
-		local imgh = self._tileset:getHeight()
-		local xtiles = math.floor(imgw / TILEW)
-		local ytiles = math.floor(imgh / TILEW)
+	self._tileset = Resources.static:getImage("tiles.png")
+	local imgw = self._tileset:getWidth()
+	local imgh = self._tileset:getHeight()
+	local xtiles = math.floor(imgw / TILEW)
+	local ytiles = math.floor(imgh / TILEW)
 
 	self._quads = {}
 	for iy = 0, ytiles-1 do
@@ -72,7 +72,7 @@ function World:walkInRoom(id, door)
 			v:kill()
 		end
 	end
-	
+
 	self:loadRoom(id)
 
 	local player = self.scene:find("player")

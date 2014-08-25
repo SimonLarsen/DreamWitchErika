@@ -15,7 +15,7 @@ Resources.static.animators = {}
 function Resources.static:getAnimator(path)
 	path = "data/animators/" .. path
 	if self.animators[path] == nil then
-		local f = loadfile(path)
+		local f = love.filesystem.load(path)
 		self.animators[path] = f()
 	end
 	return self.animators[path]

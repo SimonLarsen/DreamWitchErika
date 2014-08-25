@@ -1,22 +1,25 @@
-require("Tserial")
+local Serial = require("Serial")
 
 local Preferences = class("Preferences")
 
-Preferences.static.data = {}
 Preferences.static.path = "preferences"
 
 function Preferences.static:load()
-	if love.filesystem.exists(self.path) == false then return end
+	self.data = {}
+	if love.filesystem.exists(self.path) == false then
+		print("Preference file \"".. self.path .. "\" not found")
+		return
+	end
 
 	local strdata = love.filesystem.read(self.path)
-	local data = Tserial.unpack(strdata)
+	local data = Serial.unpack(strdata)
 	for i,v in pairs(data) do
 		self.data[i] = v
 	end
 end
 
 function Preferences.static:save()
-	local strdata = Tserial.pack(self.data)
+	local strdata = Serial.pack(self.data)
 	love.filesystem.write(self.path, strdata)
 end
 
