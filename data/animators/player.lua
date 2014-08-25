@@ -10,9 +10,10 @@ return {
 		["fly"] = { image = "fly.png", fw = 20, fh = 20, delay = 0.1 },
 		["land"] = { image = "land.png", fw = 20, fh = 20, delay = 0.08 },
 		["dash"] = { image = "dash.png", fw = 20, fh = 20, delay = 0.1 },
-		["stunned"] = { image = "stunned.png", fw = 20, fh = 20, delay = 0.1 },
+		["stunned"] = { image = "stunned.png", fw = 20, fh = 20, delay = 0.2 },
 		["powerupget"] = { image = "powerupget.png", fw = 20, fh = 20, delay = 0.13 },
 		["warp"] = { image = "warp.png", fw = 20, fh = 20, delay = 0.12, loop = false },
+		["die"] = { image = "die.png", fw = 20, fh = 20, delay = 0.12, loop = false },
 	},
 
 	properties = {
@@ -27,6 +28,7 @@ return {
 		["jump"] = { value = false, isTrigger = true },
 		["dash"] = { value = false, isTrigger = true },
 		["powerupget"] = { value = false, isTrigger = true },
+		["die"] = { value = false, isTrigger = true },
 	},
 
 	transitions = {
@@ -117,6 +119,10 @@ return {
 		{
 			from = "warp", to = "run",
 			property = "state", value = 1
+		},
+		{
+			from = "any", to = "die",
+			property = "die", value = true
 		},
 	}
 }

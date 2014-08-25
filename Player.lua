@@ -70,10 +70,6 @@ function Player:update(dt)
 	else
 		self.lasthealth = self.lasthealth - math.min(healthdiff, healthdiff*self.lasthealthspeed^2)
 	end
-	if self.health <= 0 then
-		self.health = 0
-		print("DIED")
-	end
 
 	-- Move
 	if self.dashing <= 0 and self.stunned <= 0 and self.frozen <= 0 then
@@ -189,6 +185,15 @@ function Player:update(dt)
 	end
 	if self.warping > 0 then
 		state = 4
+	end
+
+	if self.health <= 0 and self.frozen <= 0 then
+		self.health = 0
+		state = 5
+		self.animator:setProperty("die", true)
+		Timer.add(1, function()
+			self.world:leaveWorld()
+		end)
 	end
 
 	self.animator:setProperty("state", state)

@@ -33,7 +33,7 @@ function Animator:update(dt)
 	end
 
 	for i,v in pairs(self._transitions) do
-		if v.from == self._state or v.from == "any" then
+		if v.from == self._state or (v.from == "any" and v.to ~= self._state) then
 			local prop = self._properties[v.property]
 			if (v.predicate and v.predicate(prop.value, v.value))
 			or (v.predicate == nil and prop.value == v.value) then

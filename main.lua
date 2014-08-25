@@ -25,13 +25,11 @@ function love.load()
 	gamestate.switch(require("GameScene")())
 	--gamestate.switch(require("MeadowScene")())
 
-	--[[
-	Preferences.static:set("has_djump", false)
-	Preferences.static:set("has_smash", false)
-	Preferences.static:set("has_dash", false)
-	Preferences.static:set("has_superslash", false)
-	Preferences.static:set("has_wjump", false)
-	]]
+	Preferences.static:set("has_djump", true)
+	Preferences.static:set("has_smash", true)
+	Preferences.static:set("has_dash", true)
+	Preferences.static:set("has_superslash", true)
+	Preferences.static:set("has_wjump", true)
 
 	Camera.static.zoom = SCALE
 end
