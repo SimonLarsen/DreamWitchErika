@@ -1,5 +1,5 @@
 local Entity = require("Entity")
-local Animation = require("Animation")
+local Animator = require("Animator")
 local BoxCollider = require("BoxCollider")
 
 local Pickup = class("Pickup", Entity)
@@ -11,21 +11,18 @@ function Pickup:initialize(x, y, prop)
 	self.collider = BoxCollider(8, 8, 0, -14)
 	self.dir = tonumber(prop.dir)
 
+	self.animator = Animator(Resources.static:getAnimator("pickup.lua"))
 	if self.taken then
-		local sprite = Resources.static:getImage("pickup_taken.png")
-		self.anim = Animation(sprite, 40, 40, 0.1)
-	else
-		local sprite = Resources.static:getImage("pickup.png")
-		self.anim = Animation(sprite, 40, 40, 0.1)
+		self.animator:setProperty("taken", true)
 	end
 end
 
 function Pickup:update(dt)
-	self.anim:update(dt)
+	self.animator:update(dt)
 end
 
 function Pickup:draw()
-	self.anim:draw(self.x, self.y, 0, self.dir, 1, 20, 20)
+	self.animator:draw(self.x, self.y, 0, self.dir, 1, 20, 20)
 end
 
 return Pickup

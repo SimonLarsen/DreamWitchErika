@@ -1,4 +1,3 @@
-local Animation = require("Animation")
 local BoxCollider = require("BoxCollider")
 local Pickup = require("Pickup")
 
@@ -12,7 +11,7 @@ end
 function SmashPickup:onCollide(collider)
 	if self.taken == false and collider.name == "player" then
 		Preferences.static:set("has_smash", true)
-		self.anim._image = Resources.static:getImage("pickup_taken.png")
+		self.animator:setProperty("taken", true)
 		self.taken = true
 		self.collider = nil
 	end
