@@ -4,11 +4,12 @@ local BoxCollider = require("BoxCollider")
 
 local DoubleJumpPickup = class("DoubleJumpPickup", Entity)
 
-function DoubleJumpPickup:initialize(x, y)
+function DoubleJumpPickup:initialize(x, y, prop)
 	self.x, self.y = x, y+10
 	self.z = 2
 	self.taken = Preferences.static:get("has_djump", false)
 	self.collider = BoxCollider(16, 16, 0, -9)
+	self.dir = tonumber(prop.dir)
 
 	if self.taken then
 		local sprite = Resources.static:getImage("pickup_taken.png")
@@ -24,7 +25,7 @@ function DoubleJumpPickup:update(dt)
 end
 
 function DoubleJumpPickup:draw()
-	self.anim:draw(self.x, self.y, 0, 1, 1, 20, 20)
+	self.anim:draw(self.x, self.y, 0, self.dir, 1, 20, 20)
 end
 
 function DoubleJumpPickup:onCollide(collider)

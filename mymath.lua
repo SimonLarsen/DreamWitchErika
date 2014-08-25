@@ -11,3 +11,7 @@ end
 function math.cap(x, min, max)
 	return math.min(max, math.max(min, x))
 end
+
+function math.gauss()
+	return math.random() - math.random()
+end

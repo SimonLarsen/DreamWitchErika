@@ -24,7 +24,7 @@ function Knight:initialize(x, y, prop)
 	self.health = 1
 	self.blink = 0
 
-	self.collider = BoxCollider(16, 20)
+	self.collider = BoxCollider(12, 20)
 	self.animator = Animator(Resources.static:getAnimator("knight.lua"))
 end
 
@@ -97,7 +97,9 @@ function Knight:update(dt)
 	if self.world:collide(self.x-5, self.y - 10, 10, 20) then
 		self.y = oldy
 		self.yspeed = self.yspeed / 2
-		self.grounded = true
+		if self.y > 0 then
+			self.grounded = true
+		end
 	end
 
 	local oldx = self.x
@@ -121,10 +123,17 @@ end
 function Knight:onCollide(collider)
 	if self.blink > 0 then return end
 	if collider.name == "slash" then
+		if self.dir ~= math.sign(collider.x - self.x) then
+			self.dir = -self.dir
+			self.state = 3
+			self.animator:setProperty("state", 3)
+			self.cooldown = Knight.static.COOLDOWN
+		end
 		self.cooldown = 1
 		self.blink = 0.5
 		self.health = self.health - 0.34
 	elseif collider.name == "superslash" then
+		self.dir = math.sign(collider.x - self.x)
 		self.cooldown = 1
 		self.blink = 0.5
 		self.health = self.health - 0.5

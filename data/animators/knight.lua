@@ -24,7 +24,7 @@ return {
 			property = "state", value = 1
 		},
 		{
-			from = "any", to = "jump",
+			from = "run", to = "jump",
 			property = "jump", value = true
 		},
 		{

@@ -29,6 +29,7 @@ function Player:initialize()
 	self.dir = 1
 	self.name = "player"
 	self.health = 100
+	self.frozen = false
 
 	self.grounded = false
 	self.slash = 0
@@ -44,6 +45,8 @@ function Player:initialize()
 end
 
 function Player:update(dt)
+	if self.frozen == true then return end
+
 	if self.world == nil then
 		self.world = self.scene:find("world")
 	end
@@ -183,7 +186,7 @@ function Player:takeDamage(damage, collider)
 end
 
 function Player:onCollide(collider)
-	if self.dashing <= 0 and self.blink <= 0 then
+	if self.dashing <= 0 and self.blink <= 0 and self.frozen == false then
 		if collider.name == "slime" then
 			self:takeDamage(0, collider)
 		elseif collider.name == "spike" then

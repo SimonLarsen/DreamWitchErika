@@ -18,7 +18,8 @@ function love.load()
 	love.graphics.setBackgroundColor(123, 213, 220)
 
 	gamestate.registerEvents()
-	gamestate.switch(require("GameScene")())
+	--gamestate.switch(require("GameScene")())
+	gamestate.switch(require("MeadowScene")())
 
 	Preferences.static:load()
 	Preferences.static:set("has_superslash", false)
