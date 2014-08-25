@@ -11,14 +11,14 @@ function SandBlock:initialize(x, y)
 	self.collider = BoxCollider(20, 20)
 	self.broken = 0
 
-	self.anim = Animation(Resources.static:getImage("sandblock.png"), 20, 20, 0.08, false)
+	self.anim = Animation(Resources.static:getImage("sandblock.png"), 20, 20, 0.1, false)
 end
 
 function SandBlock:update(dt)
 	if self.broken > 0 then
 		self.anim:update(dt)
 		self.broken = self.broken + dt
-		if self.broken >= 0.2 then
+		if self.broken >= 0.5 then
 			self:kill()
 		end
 	end
@@ -29,8 +29,10 @@ function SandBlock:draw()
 end
 
 function SandBlock:onCollide(collider)
-	if collider.name == "superslash" then
-		self.broken = 0.0001
+	if collider.name == "slash" or collider.name == "superslash" then
+		if self.broken == 0 and Preferences.static:get("has_smash") == true then
+			self.broken = 0.0001
+		end
 	end
 end
 

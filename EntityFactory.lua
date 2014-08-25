@@ -5,6 +5,7 @@ local mapping = {
 
 	spike = require("Spike"),
 	slime = require("Slime"),
+	knight = require("Knight"),
 	wasp = require("Wasp"),
 
 	pickup_djump = require("DoubleJumpPickup"),

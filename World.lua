@@ -101,7 +101,7 @@ function World:loadRoom(id)
 		end
 	end
 	for i,v in ipairs(self._room.entities) do
-		local e = EntityFactory.static:create(v.type, v.x+TILEW/2, v.y+TILEW/2)
+		local e = EntityFactory.static:create(v.type, v.x+TILEW/2, v.y+TILEW/2, v.prop)
 		self.scene:addEntity(e)
 	end
 end

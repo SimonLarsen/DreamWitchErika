@@ -6,11 +6,11 @@ local Wasp = class("Wasp", Entity)
 
 Wasp.static.MOVE_SPEED = 100
 
-function Wasp:initialize(x, y, dir)
+function Wasp:initialize(x, y, prop)
 	self.x, self.y = x, y
 	self.z = 0
 	self.name = "wasp"
-	self.dir = dir or 1
+	self.dir = tonumber(prop.dir)
 	self.health = 1
 	self.blink = 0
 	

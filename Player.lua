@@ -183,6 +183,8 @@ function Player:onCollide(collider)
 			self:takeDamage(0, collider)
 		elseif collider.name == "wasp" then
 			self:takeDamage(0, collider)
+		elseif collider.name == "knight" then
+			self:takeDamage(0, collider)
 		end
 	end
 

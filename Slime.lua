@@ -8,7 +8,7 @@ Slime.static.GRAVITY = 600
 Slime.static.JUMP_POWER_X = 100
 Slime.static.JUMP_POWER_Y = 100
 
-function Slime:initialize(x, y, dir)
+function Slime:initialize(x, y)
 	self.x, self.y = x, y-1
 	self.z = 0
 	self.name = "slime"

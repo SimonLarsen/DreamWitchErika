@@ -83,7 +83,7 @@ function WorldData:initialize()
 		for j, e in ipairs(self._entities) do
 			if e.x >= room.x and e.x <= room.x+room.w
 			and e.y >= room.y and e.y <= room.y+room.h then
-				local newe = { x = e.x-room.x, y = e.y-room.y, type = e.type, id = e.id }
+				local newe = { x = e.x-room.x, y = e.y-room.y, type = e.type, id = e.id, prop = e.properties }
 				table.insert(room.entities, newe)
 			end
 		end

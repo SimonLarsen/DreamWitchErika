@@ -23,6 +23,7 @@ function love.load()
 	Preferences.static:load()
 	Preferences.static:set("has_superslash", false)
 	Preferences.static:set("has_djump", true)
+	Preferences.static:set("has_smash", true)
 
 	Camera.static.zoom = SCALE
 end
@@ -93,6 +94,7 @@ function love.run()
         if love.timer then
             love.timer.step()
             dt = love.timer.getDelta()
+			if love.keyboard.isDown("f") then dt = dt / 4 end
 			if dt > 1/12 then dt = 1/12 end
         end
 
