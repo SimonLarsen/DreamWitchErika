@@ -107,8 +107,16 @@ return {
 			property = "state", value = 4
 		},
 		{
+			from = "run", to = "warp",
+			property = "state", value = 4
+		},
+		{
 			from = "warp", to = "idle",
 			property = "state", value = 0
+		},
+		{
+			from = "warp", to = "run",
+			property = "state", value = 1
 		},
 	}
 }

@@ -6,13 +6,13 @@ function Scene:initialize()
 end
 
 function Scene:update(dt)
+	-- Check all vs. all collisions
+	CollisionHandler.static:checkAll(self._entities)
+
 	-- Update entities
 	for i, v in ipairs(self._entities) do
 		v:update(dt)
 	end
-
-	-- Check all vs. all collisions
-	CollisionHandler.static:checkAll(self._entities)
 
 	-- Delete dead entities
 	for i=#self._entities, 1, -1 do

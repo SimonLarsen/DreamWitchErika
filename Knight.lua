@@ -1,6 +1,7 @@
 local Entity = require("Entity")
 local Animator = require("Animator")
 local BoxCollider = require("BoxCollider")
+local Orb = require("Orb")
 
 local Knight = class("Knight", Entity)
 
@@ -144,6 +145,7 @@ function Knight:onCollide(collider)
 		self.animator:setProperty("die", true)
 	end
 	if self.health <= 0 then
+		self.scene:addEntity(Orb(self.x, self.y))
 		self.animator:setProperty("die", true)
 		self.collider = nil
 	end

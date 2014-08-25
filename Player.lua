@@ -248,10 +248,14 @@ function Player:onCollide(collider)
 		if CollisionHandler.static:checkBoxBox(self, collider) then
 			self.x = self.oldx
 		end
+
 	elseif collider.name == "pickup" then
 		self.animator:setProperty("powerupget", true)
 		self.yspeed = 0
 		self.frozen = 7*0.13
+
+	elseif collider.name == "orb" then
+		self.health = self.health + 0.05
 	end
 end
 

@@ -1,6 +1,7 @@
 local Entity = require("Entity")
 local Animator = require("Animator")
 local BoxCollider = require("BoxCollider")
+local Orb = require("Orb")
 
 local Wasp = class("Wasp", Entity)
 
@@ -62,6 +63,9 @@ function Wasp:onCollide(collider)
 	end
 
 	if self.health <= 0 then
+		if math.random() < 0.333 then
+			self.scene:addEntity(Orb(self.x, self.y))
+		end
 		self.animator:setProperty("die", true)
 		self.collider = nil
 	end

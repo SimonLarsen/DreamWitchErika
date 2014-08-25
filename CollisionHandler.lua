@@ -5,7 +5,7 @@ function CollisionHandler.static:checkAll(entities)
 		for j=i+1, #entities do
 			local v = entities[i]
 			local w = entities[j]
-			if v.collider and w.collider then
+			if i ~=j and v.collider and w.collider then
 				local collision
 				if v.collider:getType() == "box" and w.collider:getType() == "box" then
 					collision = self:checkBoxBox(v, w)

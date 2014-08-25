@@ -1,6 +1,7 @@
 local Entity = require("Entity")
 local Animator = require("Animator")
 local BoxCollider = require("BoxCollider")
+local Orb = require("Orb")
 
 local Slime = class("Slime", Entity)
 
@@ -97,6 +98,9 @@ function Slime:onCollide(collider)
 		self.animator:setProperty("die", true)
 	end
 	if self.health <= 0 then
+		if math.random() < 0.1 then
+			self.scene:addEntity(Orb(self.x, self.y))
+		end
 		self.animator:setProperty("die", true)
 		self.collider = nil
 	end
