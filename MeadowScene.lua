@@ -24,6 +24,13 @@ function MeadowScene:enter()
 	self:addEntity(SleepZ(175, 110))
 	self:addEntity(SleepZ(215, 110))
 	self:addEntity(SleepZ(255, 110))
+
+	local checkmark = Resources.static:getImage("checkmark.png")
+	for i=1, 5 do
+		if Preferences.static:get("clear" .. i, false) then
+			self:addEntity(Sprite(55+i*40, 153, -1, checkmark))
+		end
+	end
 end
 
 return MeadowScene

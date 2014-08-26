@@ -8,7 +8,7 @@ function Statue:initialize(x, y, prop)
 	self.x, self.y = x, y
 	self.z = 2
 
-	self.id = tonumber(prop.id)
+	self.id = tonumber(prop.statue)
 	self.clear = Preferences.static:get("clear"..self.id, false)
 	if self.clear then
 		self.sprite = Resources.static:getImage("statuebroken.png")

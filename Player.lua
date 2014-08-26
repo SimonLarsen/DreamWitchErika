@@ -275,7 +275,7 @@ function Player:onCollide(collider)
 		end
 	end
 
-	if collider.name == "sandblock" then
+	if collider.name == "sandblock" or collider.name == "block" then
 		if CollisionHandler.static:checkBoxBox(self, collider) then
 			self.x = self.oldx
 		end

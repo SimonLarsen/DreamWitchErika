@@ -2,6 +2,7 @@ local EntityFactory = class("EntityFactory")
 
 local mapping = {
 	sandblock = require("SandBlock"),
+	block = require("Block"),
 
 	spike = require("Spike"),
 	slime = require("Slime"),
