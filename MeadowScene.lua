@@ -7,9 +7,18 @@ local SleepZ = require("SleepZ")
 
 local MeadowScene = class("MeadowScene", Scene)
 
+function MeadowScene:initialize(title)
+	Scene.initialize(self)
+	self.title = title or false
+end
+
 function MeadowScene:enter()
-	Camera.static:setPosition(WIDTH/2, HEIGHT/2)
-	self:addEntity(Sprite(WIDTH/2, HEIGHT/2, 100, Resources.static:getImage("meadow.png")))
+	if self.title then
+		Camera.static:setPosition(WIDTH/2, -HEIGHT/2)
+	else
+		Camera.static:setPosition(WIDTH/2, HEIGHT/2)
+	end
+	self:addEntity(Sprite(WIDTH/2, 0, 100, Resources.static:getImage("meadow2.png")))
 	self:addEntity(MeadowPlayer(44, 100))
 	self:addEntity(MeadowPrompt())
 

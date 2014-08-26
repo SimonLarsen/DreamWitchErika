@@ -13,6 +13,7 @@ function MeadowPlayer:initialize(x, y)
 	self.xspeed, self.yspeed = 0, 0
 	self.grounded = false
 	self.collider = BoxCollider(16, 20)
+	self.scroll = false
 
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
 
@@ -24,6 +25,16 @@ function MeadowPlayer:update(dt)
 
 	if self.prompt == nil then
 		self.prompt = self.scene:find("meadowprompt")
+	end
+
+	if self.scroll == false then
+		if Input.static:wasPressed(" ") or Input.static:wasPressed("return") then
+			self.scroll = true
+		end
+	end
+
+	if self.scroll == true then
+		Camera.static.y = math.min(HEIGHT/2, Camera.static.y + 24*dt)
 	end
 
 	self.xspeed = 0

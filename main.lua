@@ -25,7 +25,7 @@ function love.load()
 
 	gamestate.registerEvents()
 	--gamestate.switch(require("GameScene")())
-	gamestate.switch(require("MeadowScene")())
+	gamestate.switch(require("MeadowScene")(true))
 
 	Preferences.static:set("has_djump", true)
 	Preferences.static:set("has_smash", true)
