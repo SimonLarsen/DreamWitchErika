@@ -14,6 +14,7 @@ function MeadowPlayer:initialize(x, y)
 	self.grounded = false
 	self.collider = BoxCollider(16, 20)
 	self.scroll = false
+	self.fading = false
 
 	self.animator = Animator(Resources.static:getAnimator("player.lua"))
 
@@ -34,7 +35,7 @@ function MeadowPlayer:update(dt)
 	end
 
 	if self.scroll == true then
-		Camera.static.y = math.min(HEIGHT/2, Camera.static.y + 24*dt)
+		Camera.static.y = math.min(HEIGHT/2, Camera.static.y + 32*dt)
 	end
 
 	self.xspeed = 0
@@ -83,10 +84,13 @@ function MeadowPlayer:draw()
 end
 
 function MeadowPlayer:onCollide(collider)
+	if self.fading == true then return end
+
 	if collider.name == "npc" then
 		self.prompt.x = collider.x-5
 		self.prompt.alpha = 255
 		if Input.static:wasPressed("j") then
+			self.fading = true
 			Sound.play("door")
 			self.scene:addEntity(Fade(Fade.static.TO_BLACK, 1))
 			Timer.add(0.99, function()

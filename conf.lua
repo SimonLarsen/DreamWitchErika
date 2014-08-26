@@ -1,12 +1,12 @@
 function love.conf(t)
-    t.identity = "dk.tangram.LD30"
+    t.identity = "dk.tangram.erika"
     t.version = "0.9.1"
     t.console = true
 
-    t.window.title = "Connected Worlds"
+    t.window.title = "Dream Witch Erika"
     t.window.icon = nil
-    t.window.width = 800
-    t.window.height = 600
+    t.window.width = 3*320
+    t.window.height = 3*180
     t.window.borderless = false
     t.window.resizable = false
     t.window.minwidth = 1

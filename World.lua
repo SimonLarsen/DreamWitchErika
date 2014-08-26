@@ -122,8 +122,8 @@ function World:loadRoom(id)
 end
 
 function World:buildSpriteBatchs(room)
-	self._fgbatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
-	self._bgbatch = love.graphics.newSpriteBatch(self._tileset, room.w*room.h)
+	self._fgbatch = love.graphics.newSpriteBatch(self._tileset, 2*room.w*room.h)
+	self._bgbatch = love.graphics.newSpriteBatch(self._tileset, 2*room.w*room.h)
 
 	local xtiles = room.w / TILEW
 	for i, tile in ipairs(room.fgtiles) do
@@ -144,6 +144,9 @@ function World:buildSpriteBatchs(room)
 			y = math.floor((i-1) / xtiles) * TILEW
 		end
 		if tile > 0 then
+			if self._quads[tile] == nil then
+				print(tile)
+			end
 			self._bgbatch:add(self._quads[tile], x, y)
 		end
 	end

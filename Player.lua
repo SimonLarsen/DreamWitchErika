@@ -98,7 +98,7 @@ function Player:update(dt)
 				self.yspeed = -Player.static.JUMP_POWER
 				self.animator:setProperty("jump", true)
 			elseif Preferences.static:get("has_wjump", false) == true then
-				local boxx = self.x - self.dir*20
+				local boxx = self.x - self.dir*16
 				if self.world:collide(boxx-2, self.y-2, 4, 4) then
 					Sound.play("jump")
 					self.yspeed = -Player.static.JUMP_POWER
@@ -281,12 +281,13 @@ function Player:onCollide(collider)
 		end
 
 	elseif collider.name == "pickup" then
+		Sound.play("powerup")
 		self.animator:setProperty("powerupget", true)
 		self.yspeed = 0
 		self.frozen = 7*0.13
 
 	elseif collider.name == "orb" then
-		self.health = self.health + 0.05
+		self.health = self.health + 0.1
 		Sound.play("powerup")
 	end
 end

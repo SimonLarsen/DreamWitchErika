@@ -10,7 +10,7 @@ function Slash:initialize(x, y, dir, xspeed)
 	self.dir = dir
 	self.time = 0
 	self.name = "slash"
-	self.collider = BoxCollider(11, 17)
+	self.collider = BoxCollider(14, 17)
 
 	local sprite = Resources.static:getImage("slash.png")
 	self.anim = Animation(sprite, 11, 17, 0.0667, 5, 8)

@@ -98,7 +98,7 @@ function Slime:onCollide(collider)
 		self.animator:setProperty("die", true)
 	end
 	if self.health <= 0 then
-		if math.random() < 0.1 then
+		if math.random() < 0.3 then
 			self.scene:addEntity(Orb(self.x, self.y))
 		end
 		self.animator:setProperty("die", true)

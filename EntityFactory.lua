@@ -12,11 +12,11 @@ local mapping = {
 	pickup_djump = require("DoubleJumpPickup"),
 	pickup_smash = require("SmashPickup"),
 	pickup_dash = require("DashPickup"),
-	pickup_superslash = require("SuperSlash"),
-	pickup_wwjump = require("WallJumpPickup"),
+	pickup_superslash = require("SuperSlashPickup"),
+	pickup_wjump = require("WallJumpPickup"),
 
 	statue = require("Statue"),
-	hourglass = require("hourglass"),
+	hourglass = require("Hourglass"),
 }
 
 function EntityFactory.static:create(type, ...)

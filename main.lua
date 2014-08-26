@@ -27,12 +27,6 @@ function love.load()
 	--gamestate.switch(require("GameScene")())
 	gamestate.switch(require("MeadowScene")(true))
 
-	Preferences.static:set("has_djump", true)
-	Preferences.static:set("has_smash", true)
-	Preferences.static:set("has_dash", true)
-	Preferences.static:set("has_superslash", true)
-	Preferences.static:set("has_wjump", true)
-
 	Camera.static.zoom = SCALE
 end
 
@@ -107,7 +101,6 @@ function love.run()
         if love.timer then
             love.timer.step()
             dt = love.timer.getDelta()
-			if love.keyboard.isDown("f") then dt = dt / 4 end
 			if dt > 1/12 then dt = 1/12 end
         end
 
