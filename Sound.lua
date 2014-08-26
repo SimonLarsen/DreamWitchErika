@@ -12,6 +12,7 @@ function Sound.music(name)
 	end
 	music = love.audio.newSource("data/music/" .. name .. ".ogg")
 	music:setVolume(0.5)
+	music:setLooping(true)
 	love.audio.play(music)
 end
 

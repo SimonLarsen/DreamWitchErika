@@ -35,10 +35,17 @@ function MeadowScene:enter()
 	self:addEntity(SleepZ(255, 110))
 
 	local checkmark = Resources.static:getImage("checkmark.png")
+	local allclear = true
 	for i=1, 5 do
 		if Preferences.static:get("clear" .. i, false) then
 			self:addEntity(Sprite(55+i*40, 153, -1, checkmark))
+		else
+			allclear = false
 		end
+	end
+	
+	if allclear then
+		self:addEntity(Sprite(WIDTH/2, 28, -2, Resources.static:getImage("congratulations.png")))
 	end
 end
 
