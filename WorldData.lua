@@ -15,6 +15,7 @@ function WorldData:initialize()
 	self._bgtiles = {}
 	self._xtiles, self._ytiles = 0, 0
 
+	Entity.static:resetIds()
 	for i,v in ipairs(data.layers) do
 		if v.name == "FG" then
 			self._xtiles = v.width

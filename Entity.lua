@@ -38,4 +38,8 @@ function Entity.static:getId()
 	return id
 end
 
+function Entity.static:resetIds()
+	self.next_id = 0
+end
+
 return Entity

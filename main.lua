@@ -24,7 +24,6 @@ function love.load()
 	Preferences.static:load()
 
 	gamestate.registerEvents()
-	--gamestate.switch(require("GameScene")())
 	gamestate.switch(require("MeadowScene")(true))
 
 	Camera.static.zoom = SCALE
@@ -51,9 +50,6 @@ function love.gui()
 end
 
 function love.keypressed(k)
-	if k == "escape" then
-		love.event.quit()
-	end
 	Input.static:keypressed(k)
 end
 

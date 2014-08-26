@@ -8,7 +8,7 @@ function Spike:initialize(x, y)
 	self.x, self.y = x, y
 	self.z = 1
 	self.name = "spike"
-	self.collider = BoxCollider(5, 10)
+	self.collider = BoxCollider(10, 10)
 
 	self.sprite = Resources.static:getImage("spike.png")
 end

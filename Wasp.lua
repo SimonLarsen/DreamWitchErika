@@ -31,6 +31,11 @@ function Wasp:update(dt)
 			self.x = oldx
 			self.dir = -self.dir
 		end
+		if self.x < 10 then
+			self.dir = 1
+		elseif self.x > self.world:getRoom().w-10 then
+			self.dir = -1
+		end
 	else
 		if self.blink <= 0 then
 			self:kill()

@@ -16,7 +16,7 @@ Player.static.TIME_SPEED = 0.75/180
 Player.static.DASH_SPEED = 600
 Player.static.DASH_TIME = 0.07
 
-Player.static.COOLDOWN = 0.5
+Player.static.COOLDOWN = 0.6
 Player.static.DASH_COOLDOWN = 0.6
 Player.static.BLINK_TIME = 1.5
 Player.static.STUNNED_TIME = 0.4

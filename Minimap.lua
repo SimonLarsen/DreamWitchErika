@@ -25,7 +25,7 @@ end
 function Minimap:gui()
 	if self.worlddata == nil or self.enabled == false then return end
 
-	love.graphics.setColor(0, 0, 0, 128)
+	love.graphics.setColor(90, 183, 92, 128)
 	local room = self.world:getRoom()
 	love.graphics.rectangle("fill", 60+room.x*scale, room.y*scale, room.w*scale, room.h*scale)
 
