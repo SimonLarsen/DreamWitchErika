@@ -14,6 +14,7 @@ function WorldData:initialize()
 	self._fgtiles = {}
 	self._bgtiles = {}
 	self._xtiles, self._ytiles = 0, 0
+	self._hourglasses = 0
 
 	Entity.static:resetIds()
 	for i,v in ipairs(data.layers) do
@@ -45,6 +46,9 @@ function WorldData:initialize()
 					o.id = Entity.static:getId()
 					o.properties.id = o.id
 					table.insert(self._entities, o)
+					if o.type == "hourglass" then
+						self._hourglasses = self._hourglasses + 1
+					end
 				end
 			end
 		end
@@ -122,6 +126,10 @@ function WorldData:getRoom(id)
 			return v
 		end
 	end
+end
+
+function WorldData:getHourglassCount()
+	return self._hourglasses
 end
 
 return WorldData

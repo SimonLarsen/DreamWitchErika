@@ -64,7 +64,7 @@ function Player:update(dt)
 	if self.dashcooldown > 0 then self.dashcooldown = self.dashcooldown - dt end
 	if self.frozen > 0 then self.frozen = self.frozen - dt end
 
-	self.maxhealth = 0.75 + Preferences.static:get("hourglasses", 0) * 0.05
+	self.maxhealth = 0.75 + Preferences.static:get("hourglasses", 0) * 0.25/self.world:getWorldData():getHourglassCount()
 	self.health = math.min(self.maxhealth, math.max(0, self.health - Player.static.TIME_SPEED * dt))
 	self.lasthealthspeed = self.lasthealthspeed + dt/5
 	local healthdiff = self.lasthealth - self.health
