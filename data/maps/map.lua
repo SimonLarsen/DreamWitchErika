@@ -15,7 +15,7 @@ return {
       tileheight = 20,
       spacing = 0,
       margin = 0,
-      image = "../../../../Dropbox/LD48/map/tiles.png",
+      image = "../../../../Dropbox/Dream Witch Erika/map/tiles.png",
       imagewidth = 400,
       imageheight = 800,
       properties = {},

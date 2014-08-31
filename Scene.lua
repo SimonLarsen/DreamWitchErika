@@ -14,6 +14,9 @@ function Scene:update(dt)
 		v:update(dt)
 	end
 
+	-- Update timers
+	Timer.update(dt)
+
 	-- Delete dead entities
 	for i=#self._entities, 1, -1 do
 		if self._entities[i]:isAlive() == false then

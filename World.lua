@@ -103,7 +103,7 @@ end
 function World:loadRoom(id)
 	self._room = self._worlddata:getRoom(id)
 
-	self:buildSpriteBatchs(self._room)
+	self:buildSpriteBatches(self._room)
 	self:buildCollisionBoxes(self._room)
 
 	for i,v in ipairs(self._room.doors) do
@@ -121,7 +121,7 @@ function World:loadRoom(id)
 	Preferences.static:set(self._room.id, true)
 end
 
-function World:buildSpriteBatchs(room)
+function World:buildSpriteBatches(room)
 	self._fgbatch = love.graphics.newSpriteBatch(self._tileset, 2*room.w*room.h)
 	self._bgbatch = love.graphics.newSpriteBatch(self._tileset, 2*room.w*room.h)
 
@@ -144,9 +144,6 @@ function World:buildSpriteBatchs(room)
 			y = math.floor((i-1) / xtiles) * TILEW
 		end
 		if tile > 0 then
-			if self._quads[tile] == nil then
-				print(tile)
-			end
 			self._bgbatch:add(self._quads[tile], x, y)
 		end
 	end

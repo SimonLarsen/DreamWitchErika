@@ -30,7 +30,7 @@ function love.load()
 end
 
 function love.update(dt)
-	Timer.update(dt)
+
 end
 
 function love.draw()
